@@ -30,6 +30,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Extensibility\IModule.cs" />
+    <Compile Include="Extensibility\ModuleWrapper.cs" />
+    <Compile Include="Extensibility\ModulePool.cs" />
+    <Compile Include="Extensibility\AppDomainProxy.cs" />
+    <Compile Include="Extensibility\AssemblyLoader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -41,4 +46,7 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="Extensibility\" />
+  </ItemGroup>
 </Project>
