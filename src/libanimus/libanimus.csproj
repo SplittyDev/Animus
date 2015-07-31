@@ -35,6 +35,9 @@
     <Compile Include="Extensibility\ModulePool.cs" />
     <Compile Include="Extensibility\AppDomainProxy.cs" />
     <Compile Include="Extensibility\AssemblyLoader.cs" />
+    <Compile Include="Cryptography\KeyPair.cs" />
+    <Compile Include="Cryptography\PublicKeyEncryptionProvider.cs" />
+    <Compile Include="Cryptography\AsymmetricEncryptionProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -48,5 +51,6 @@
   </ProjectExtensions>
   <ItemGroup>
     <Folder Include="Extensibility\" />
+    <Folder Include="Cryptography\" />
   </ItemGroup>
 </Project>
