@@ -27,6 +27,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="IrcDotNet">
+      <HintPath>..\..\..\..\..\Downloads\ircdotnet-0.4.1-bin\net40\IrcDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -36,8 +39,9 @@
     <Compile Include="Extensibility\AppDomainProxy.cs" />
     <Compile Include="Extensibility\AssemblyLoader.cs" />
     <Compile Include="Cryptography\KeyPair.cs" />
-    <Compile Include="Cryptography\PublicKeyEncryptionProvider.cs" />
-    <Compile Include="Cryptography\AsymmetricEncryptionProvider.cs" />
+    <Compile Include="Cryptography\RSA.cs" />
+    <Compile Include="Cryptography\RSABase.cs" />
+    <Compile Include="IO\AltFileStream.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -52,5 +56,6 @@
   <ItemGroup>
     <Folder Include="Extensibility\" />
     <Folder Include="Cryptography\" />
+    <Folder Include="IO\" />
   </ItemGroup>
 </Project>
