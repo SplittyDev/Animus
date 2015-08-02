@@ -42,6 +42,11 @@
     <Compile Include="Cryptography\RSA.cs" />
     <Compile Include="Cryptography\RSABase.cs" />
     <Compile Include="IO\AltFileStream.cs" />
+    <Compile Include="Native\CreateProcess.cs" />
+    <Compile Include="Native\DeleteFileW.cs" />
+    <Compile Include="Native\CreateFileW.cs" />
+    <Compile Include="Native\CreateFile.Constants.cs" />
+    <Compile Include="Native\PathFileExists.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -57,5 +62,6 @@
     <Folder Include="Extensibility\" />
     <Folder Include="Cryptography\" />
     <Folder Include="IO\" />
+    <Folder Include="Native\" />
   </ItemGroup>
 </Project>

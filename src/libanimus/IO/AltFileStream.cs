@@ -3,14 +3,12 @@ using System.IO;
 
 namespace libanimus
 {
-	public class AltFileStream : FileStream
+	/// <summary>
+	/// Alternate NTFS file stream.
+	/// </summary>
+	public class AltFileStream
 	{
-		public AltFileStream (string path, string stream,
-			FileMode mode = FileMode.OpenOrCreate,
-			FileAccess access = FileAccess.ReadWrite,
-			FileShare share = FileShare.None)
-			: base (path, mode, access, share) {
-		}
+		
 	}
 }
 
