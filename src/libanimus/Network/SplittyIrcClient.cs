@@ -6,14 +6,14 @@ using NetIrc2;
 
 namespace libanimus
 {
-	public class IrcClient
+	public class SplittyIrcClient
 	{
 		readonly ICollection<HostAction> actions;
 		readonly NetIrc2.IrcClient client;
 		readonly Guid guid;
 		readonly string id;
 
-		public IrcClient () {
+		public SplittyIrcClient () {
 			actions = new List<HostAction> ();
 			client = new NetIrc2.IrcClient ();
 			guid = Guid.NewGuid ();
@@ -25,7 +25,8 @@ namespace libanimus
 			options.SslCertificateValidationCallback =
 				new RemoteCertificateValidationCallback ((sender, certificate, chain, sslPolicyErrors) => true);
 			client.Connect (server, port, options);
-			client.ChangeName (id);
+			client.LogIn (id, id, id);
+			client.Join ("#OperationMythicDawn");
 			client.GotChatAction += Client_GotChatAction;
 		}
 

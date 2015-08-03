@@ -50,9 +50,9 @@
     <Compile Include="Native\CreateFileW.cs" />
     <Compile Include="Native\CreateFile.Constants.cs" />
     <Compile Include="Native\PathFileExists.cs" />
-    <Compile Include="Network\IrcClient.cs" />
     <Compile Include="Network\Command.cs" />
     <Compile Include="Network\HostAction.cs" />
+    <Compile Include="Network\SplittyIrcClient.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
