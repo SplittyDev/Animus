@@ -12,7 +12,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Debug</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -20,15 +20,18 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\Release</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="IrcDotNet">
-      <HintPath>..\..\..\..\..\Downloads\ircdotnet-0.4.1-bin\net40\IrcDotNet.dll</HintPath>
+    <Reference Include="CodeFluent.Runtime.Client">
+      <HintPath>packages\CodeFluentRuntimeClient.1.0.0.818\lib\CodeFluent.Runtime.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="NetIrc2">
+      <HintPath>packages\NetIrc2.1.0.0.0\lib\NetIrc2.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +50,9 @@
     <Compile Include="Native\CreateFileW.cs" />
     <Compile Include="Native\CreateFile.Constants.cs" />
     <Compile Include="Native\PathFileExists.cs" />
+    <Compile Include="Network\IrcClient.cs" />
+    <Compile Include="Network\Command.cs" />
+    <Compile Include="Network\HostAction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -63,5 +69,12 @@
     <Folder Include="Cryptography\" />
     <Folder Include="IO\" />
     <Folder Include="Native\" />
+    <Folder Include="Network\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="External\Readme.txt" />
+    <None Include="External\x64\CodeFluent.Runtime.Compression.dll" />
+    <None Include="External\x86\CodeFluent.Runtime.Compression.dll" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

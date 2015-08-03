@@ -3,12 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libanimus", "libanimus.csproj", "{A73F20AB-4123-4FC7-AA9D-BFABD39948FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimusCore", "..\AnimusCore\AnimusCore.csproj", "{6382A1F8-7BFC-48E8-A731-4B288FBDC4C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6382A1F8-7BFC-48E8-A731-4B288FBDC4C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6382A1F8-7BFC-48E8-A731-4B288FBDC4C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6382A1F8-7BFC-48E8-A731-4B288FBDC4C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6382A1F8-7BFC-48E8-A731-4B288FBDC4C4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A73F20AB-4123-4FC7-AA9D-BFABD39948FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A73F20AB-4123-4FC7-AA9D-BFABD39948FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A73F20AB-4123-4FC7-AA9D-BFABD39948FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
