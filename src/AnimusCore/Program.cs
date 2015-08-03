@@ -5,14 +5,14 @@ namespace AnimusCore
 {
 	class MainClass
 	{
-		IrcClient client;
+		SplittyIrcClient client;
 
 		public static void Main (string[] args) {
 			new MainClass ().Main ();
 		}
 
 		public MainClass () {
-			client = new IrcClient ();
+			client = new SplittyIrcClient ();
 		}
 
 		public void Main () {

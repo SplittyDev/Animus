@@ -53,6 +53,9 @@
     <Compile Include="Network\Command.cs" />
     <Compile Include="Network\HostAction.cs" />
     <Compile Include="Network\SplittyIrcClient.cs" />
+    <Compile Include="Network\irc\IrcClient.cs" />
+    <Compile Include="Network\irc\IrcClientConnectionOptions.cs" />
+    <Compile Include="Network\irc\ConnectionFailedException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -70,6 +73,7 @@
     <Folder Include="IO\" />
     <Folder Include="Native\" />
     <Folder Include="Network\" />
+    <Folder Include="Network\irc\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="External\Readme.txt" />
