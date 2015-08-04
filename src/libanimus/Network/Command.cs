@@ -19,19 +19,19 @@ namespace libanimus
 				var awaitquote = false;
 				var lst = new List<string> ();
 				while (i < argstr.Length) {
-					var _status = awaitquote;
+					if (argstr [i] == ' ' && !awaitquote) {
+						lst.Add (accum.ToString ());
+						accum.Clear ();
+					} else {
+						accum.Append (argstr [i]);
+					}
 					if (argstr [i] == '"' && awaitquote)
 						awaitquote = false;
 					else if (argstr [i] == '"' && !awaitquote)
 						awaitquote = true;
-					var _i = awaitquote != _status ? 1 : 0;
-					if (argstr [_i] == ' ' && !awaitquote) {
-						lst.Add (accum.ToString ());
-						accum.Clear ();
-					} else
-						accum.Append (argstr [_i]);
 					++i;
 				}
+				lst.Add (accum.ToString ());
 				command.args = lst.ToArray ();
 			} else {
 				command.name = com;

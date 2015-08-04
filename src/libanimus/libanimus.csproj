@@ -46,8 +46,8 @@
     <Compile Include="Native\PathFileExists.cs" />
     <Compile Include="Network\Command.cs" />
     <Compile Include="Network\HostAction.cs" />
-    <Compile Include="Network\irc\IrcClient.cs" />
-    <Compile Include="Network\irc\ConnectionFailedException.cs" />
+    <Compile Include="Network\IRC\IrcClient.cs" />
+    <Compile Include="Network\IRC\ConnectionFailedException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -65,6 +65,6 @@
     <Folder Include="IO\" />
     <Folder Include="Native\" />
     <Folder Include="Network\" />
-    <Folder Include="Network\irc\" />
+    <Folder Include="Network\IRC\" />
   </ItemGroup>
 </Project>
