@@ -5,14 +5,29 @@ using System.Text;
 
 namespace libanimus
 {
+	/// <summary>
+	/// Command.
+	/// </summary>
 	public class Command {
-		public string name;
-		public string[] args;
+		
+		/// <summary>
+		/// The name.
+		/// </summary>
+		public string Name;
 
+		/// <summary>
+		/// The arguments.
+		/// </summary>
+		public string[] Args;
+
+		/// <summary>
+		/// Parses the specified command.
+		/// </summary>
+		/// <param name="com">The command.</param>
 		public static Command Parse (string com) {
 			var command = new Command ();
 			if (com.Contains (" ")) {
-				command.name = new string (com.TakeWhile (c => c != ' ').ToArray ());
+				command.Name = new string (com.TakeWhile (c => c != ' ').ToArray ());
 				var argstr = new string (com.Skip (com.IndexOf (' ') + 1).ToArray ());
 				var accum = new StringBuilder ();
 				var i = 0;
@@ -32,10 +47,10 @@ namespace libanimus
 					++i;
 				}
 				lst.Add (accum.ToString ());
-				command.args = lst.ToArray ();
+				command.Args = lst.ToArray ();
 			} else {
-				command.name = com;
-				command.args = new string[0];
+				command.Name = com;
+				command.Args = new string[0];
 			}
 			return command;
 		}

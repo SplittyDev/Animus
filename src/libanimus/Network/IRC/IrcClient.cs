@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Text;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace libanimus {
 	public class IrcClient {
@@ -116,7 +116,13 @@ namespace libanimus {
 			id = string.Format ("animus{0}", new string (guid.ToString ("N").Take (16).ToArray ()));
 			IsConnected = false;
 			HasJoined = false;
-			OnChannelMessage += (message, sender) => { };
+			OnChannelMessage += (message, sender) => {
+				var com = Command.Parse (message);
+				com.Name = com.Name.ToLowerInvariant ();
+				var acts = actions.Where (act => act.Name.ToLowerInvariant () == com.Name);
+				foreach (var act in acts)
+					act.Run (com.Args);
+			};
 			OnPrivateMessage += (message, sender) => { };
 		}
 
@@ -126,24 +132,18 @@ namespace libanimus {
 		/// <param name="server">Server.</param>
 		/// <param name="port">Port.</param>
 		/// <param name="ssl">Whether the connection should use SSL..</param>
+		/// <param name="callback">The callback that checks the SSL certificate for validity</param> 
 		public void Connect (string server, int port, bool ssl, RemoteCertificateValidationCallback callback = null) {
 			validationCallback = callback;
 			if (validationCallback == null)
-				validationCallback = new RemoteCertificateValidationCallback ((sender, certificate, chain, sslPolicyErrors) => true);
+				validationCallback = new RemoteCertificateValidationCallback
+					((sender, certificate, chain, sslPolicyErrors) => true);
 			_Connect (server, port, ssl);
 			while (!IsConnected) {}
 			USER (id);
 			NICK (id);
 			while (!HasJoined) {}
 			MODE (Nickname, "+B");
-		}
-
-		/// <summary>
-		/// Registers an action.
-		/// </summary>
-		/// <param name="action">Action.</param>
-		public void RegisterAction (HostAction action) {
-			actions.Add (action);
 		}
 
 		/// <summary>
@@ -157,6 +157,14 @@ namespace libanimus {
 			sb.Append ("\r\n");
 			Writer.Write (sb);
 			Writer.Flush ();
+		}
+
+		/// <summary>
+		/// Registers an action.
+		/// </summary>
+		/// <param name="action">Action.</param>
+		public void RegisterAction (HostAction action) {
+			actions.Add (action);
 		}
 
 		#region Raw IRC commands
@@ -208,7 +216,7 @@ namespace libanimus {
 			JOIN (channel);
 		}
 
-		public void Privmsg (string msg, string target) {
+		public void Message (string msg, string target) {
 			PRIVMSG (target, msg);
 		}
 
@@ -266,6 +274,7 @@ namespace libanimus {
 
 					string ident = string.Empty;
 					if (commandParts.First ().Contains (Server)) {
+						
 						switch (commandParts [1]) {
 						case "001":
 						case "002":
@@ -274,30 +283,35 @@ namespace libanimus {
 							HasJoined = true;
 							break;
 						}
+
+						// Ignore all other numeric messages
 						if (Regex.IsMatch (commandParts.Skip (1).First (), @"^\d+$"))
 							continue;
-					} else if (commandParts.First ().Contains ("@")) {
+					}
+					else if (commandParts.First ().Contains ("@")) {
+						
 						ident = commandParts.First ();
 						commandParts = commandParts.Skip (1).ToArray ();
 					}
 
 					var com = Command.Parse (string.Join (" ", commandParts));
-					//Console.WriteLine ("Command: '{0}'", com.name);
-					switch (com.name) {
+					switch (com.Name) {
+
+					// PING
 					case "PING":
-						PONG (com.args [0], com.args.Length > 1 ? com.args [1] : null);
+						PONG (com.Args [0], com.Args.Length > 1 ? com.Args [1] : null);
 						break;
+
+					// PRIVMSG
 					case "PRIVMSG":
-						if (com.args.Length > 1) {
-							if (com.args [0].StartsWith ("#"))
-								OnChannelMessage (string.Join (" ", com.args.Skip (1)).TrimStart (':'), com.args [0]);
+						var sender_nick = new string (ident.TakeWhile (c => c != '!').ToArray ());
+						var msg = string.Join (" ", com.Args.Skip (1)).TrimStart (':');
+						if (com.Args.Length >= 2) {
+							if (com.Args [0].StartsWith ("#"))
+								OnChannelMessage (msg, com.Args [0]);
 							else
-								OnPrivateMessage (string.Join (" ", com.args.Skip (1)).TrimStart (':'),
-									new string (ident.TakeWhile (c => c != '!').ToArray ()));
+								OnPrivateMessage (msg, sender_nick);
 						}
-						break;
-					default:
-						//Console.WriteLine ("Unknown command: {0}", com.name);
 						break;
 					}
 				}
