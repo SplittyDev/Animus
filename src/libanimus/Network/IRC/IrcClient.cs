@@ -7,6 +7,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace libanimus {
 	public class IrcClient {
@@ -63,6 +64,25 @@ namespace libanimus {
 
 		#endregion
 
+		#region Events
+
+		/// <summary>
+		/// Message handler.
+		/// </summary>
+		public delegate void MessageHandler (string message, string sender);
+
+		/// <summary>
+		/// Occurs when a channel message has been received.
+		/// </summary>
+		public event MessageHandler OnChannelMessage;
+
+		/// <summary>
+		/// Occurs when a private message has been received.
+		/// </summary>
+		public event MessageHandler OnPrivateMessage;
+
+		#endregion
+
 		#region Private Fields
 
 		/// <summary>
@@ -96,6 +116,8 @@ namespace libanimus {
 			id = string.Format ("animus{0}", new string (guid.ToString ("N").Take (16).ToArray ()));
 			IsConnected = false;
 			HasJoined = false;
+			OnChannelMessage += (message, sender) => { };
+			OnPrivateMessage += (message, sender) => { };
 		}
 
 		/// <summary>
@@ -186,6 +208,10 @@ namespace libanimus {
 			JOIN (channel);
 		}
 
+		public void Privmsg (string msg, string target) {
+			PRIVMSG (target, msg);
+		}
+
 		#endregion
 
 		#region Private methods
@@ -236,10 +262,10 @@ namespace libanimus {
 			string line;
 			while (true) {
 				while ((line = Reader.ReadLine ()) != null) {
-					Console.WriteLine (line);
-
 					var commandParts = line.TrimStart (':').Split (' ');
-					if (commandParts [0].Contains (Server)) {
+
+					string ident = string.Empty;
+					if (commandParts.First ().Contains (Server)) {
 						switch (commandParts [1]) {
 						case "001":
 						case "002":
@@ -248,14 +274,30 @@ namespace libanimus {
 							HasJoined = true;
 							break;
 						}
-						continue;
+						if (Regex.IsMatch (commandParts.Skip (1).First (), @"^\d+$"))
+							continue;
+					} else if (commandParts.First ().Contains ("@")) {
+						ident = commandParts.First ();
+						commandParts = commandParts.Skip (1).ToArray ();
 					}
 
 					var com = Command.Parse (string.Join (" ", commandParts));
-					Console.WriteLine ("Command: '{0}'", com.name);
+					//Console.WriteLine ("Command: '{0}'", com.name);
 					switch (com.name) {
 					case "PING":
 						PONG (com.args [0], com.args.Length > 1 ? com.args [1] : null);
+						break;
+					case "PRIVMSG":
+						if (com.args.Length > 1) {
+							if (com.args [0].StartsWith ("#"))
+								OnChannelMessage (string.Join (" ", com.args.Skip (1)).TrimStart (':'), com.args [0]);
+							else
+								OnPrivateMessage (string.Join (" ", com.args.Skip (1)).TrimStart (':'),
+									new string (ident.TakeWhile (c => c != '!').ToArray ()));
+						}
+						break;
+					default:
+						//Console.WriteLine ("Unknown command: {0}", com.name);
 						break;
 					}
 				}
