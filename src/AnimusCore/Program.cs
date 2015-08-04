@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using libanimus;
 
 namespace AnimusCore
@@ -18,9 +19,15 @@ namespace AnimusCore
 		public void Main () {
 			client.Connect ("int0x10.com", 6697, true);
 			client.Join ("#OperationMythicDawn");
-			client.PRIVMSG ("#OperationMythicDawn", "Hello from Animus!");
-			while (true) {
-			}
+			client.OnChannelMessage += (message, sender) =>
+				Console.WriteLine ("[{0}] {1}", sender, message);
+			client.OnPrivateMessage += (message, sender) =>
+				Console.WriteLine ("[{0}] {1}", sender, message);
+			Idle ();
+		}
+
+		static void Idle () {
+			Thread.Sleep (Timeout.InfiniteTimeSpan);
 		}
 	}
 }
