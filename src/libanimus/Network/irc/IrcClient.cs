@@ -139,6 +139,13 @@ namespace libanimus {
 
 		#region Raw IRC commands
 
+		public void PONG (string server1, string server2 = null) {
+			if (string.IsNullOrEmpty (server2))
+				SendRaw ("PONG {0}", server1);
+			else
+				SendRaw ("PONG {0} {1}", server1, server2);
+		}
+
 		public void USER (string username, string realname = null) {
 			if (string.IsNullOrEmpty (realname))
 				realname = username;
@@ -156,6 +163,10 @@ namespace libanimus {
 
 		public void JOIN (string channel) {
 			SendRaw ("JOIN {0}", channel);
+		}
+
+		public void PRIVMSG (string target, string message) {
+			SendRaw ("PRIVMSG {0} {1}", target, message);
 		}
 
 		#endregion
@@ -189,28 +200,25 @@ namespace libanimus {
 			
 			Server = server;
 			Port = port;
+
 			var client = new TcpClient (Server, Port);
+			Stream = client.GetStream ();
 
-			if (client.Connected) {
-				Stream = client.GetStream ();
-
-				if (ssl) {
-					Stream = new SslStream (client.GetStream (), false, validationCallback);
-					try {
-						((SslStream)Stream).AuthenticateAsClient (Server);
-					} catch (AuthenticationException e) {
-						Console.WriteLine ("Exception: {0}", e.Message);
-						if (e.InnerException != null) {
-							Console.WriteLine ("Inner exception: {0}", e.InnerException.Message);
-						}
-						Console.WriteLine ("Authentication failed - closing the connection.");
-						client.Close ();
-						return;
-					}
-				}
-			} else {
+			if (!client.Connected) {
 				var exceptionText = string.Format ("Could not connect to {0}:{1}", Server, Port);
 				throw new ConnectionFailedException (exceptionText);
+			}
+
+			if (ssl) {
+				Stream = new SslStream (Stream, false, validationCallback);
+				try {
+					((SslStream)Stream).AuthenticateAsClient (Server);
+				} catch (AuthenticationException e) {
+					Console.Error.WriteLine ("Authentication failed - closing the connection");
+					Console.Error.WriteLine ("Reason: {0}", e.Message);
+					client.Close ();
+					return;
+				}
 			}
 
 			IsConnected = true;
@@ -218,30 +226,40 @@ namespace libanimus {
 			Reader = new StreamReader (Stream);
 			Writer = new StreamWriter (Stream);
 
-			Task.Factory.StartNew (() => {
-				string line;
-				while (true) {
-					while ((line = Reader.ReadLine ()) != null) {
-						Console.WriteLine (line);
+			Task.Factory.StartNew (_Listen);
+		}
 
-						var commandParts = line.Split (' ');
-						if (commandParts [0].Substring (0, 1) == ":") {
-							commandParts [0] = commandParts [0].Remove (0, 1);
-						}
+		/// <summary>
+		/// Listens for incoming commands.
+		/// </summary>
+		void _Listen () {
+			string line;
+			while (true) {
+				while ((line = Reader.ReadLine ()) != null) {
+					Console.WriteLine (line);
 
-						if (commandParts [0].Contains (Server))
-							switch (commandParts [1]) {
+					var commandParts = line.TrimStart (':').Split (' ');
+					if (commandParts [0].Contains (Server)) {
+						switch (commandParts [1]) {
 						case "001":
+						case "002":
+						case "003":
+						case "004":
 							HasJoined = true;
 							break;
-							}
-
-						if (commandParts[0] == "PING") {
-							SendRaw ("PONG {0}", commandParts [1]);
 						}
+						continue;
+					}
+
+					var com = Command.Parse (string.Join (" ", commandParts));
+					Console.WriteLine ("Command: '{0}'", com.name);
+					switch (com.name) {
+					case "PING":
+						PONG (com.args [0], com.args.Length > 1 ? com.args [1] : null);
+						break;
 					}
 				}
-			});
+			}
 		}
 
 		#endregion
