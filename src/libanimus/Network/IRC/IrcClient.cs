@@ -140,10 +140,6 @@ namespace libanimus {
 					((sender, certificate, chain, sslPolicyErrors) => true);
 			_Connect (server, port, ssl);
 			while (!IsConnected) {}
-			USER (id);
-			NICK (id);
-			while (!HasJoined) {}
-			MODE (Nickname, "+B");
 		}
 
 		/// <summary>
@@ -206,6 +202,7 @@ namespace libanimus {
 		public void LogIn (string username, string realname, string nickname) {
 			USER (username, realname);
 			NICK (nickname);
+			while (!HasJoined) {}
 		}
 
 		public void Mode (string mode) {
