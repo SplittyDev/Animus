@@ -27,6 +27,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Management" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="Network\HostAction.cs" />
     <Compile Include="Network\IRC\IrcClient.cs" />
     <Compile Include="Network\IRC\ConnectionFailedException.cs" />
+    <Compile Include="Windows\Antivirus.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -66,5 +68,6 @@
     <Folder Include="Native\" />
     <Folder Include="Network\" />
     <Folder Include="Network\IRC\" />
+    <Folder Include="Windows\" />
   </ItemGroup>
 </Project>
