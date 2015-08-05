@@ -83,6 +83,15 @@ namespace libanimus {
 
 		#endregion
 
+		#region Public Fields
+
+		/// <summary>
+		/// The identifier.
+		/// </summary>
+		public readonly string Identifier;
+
+		#endregion
+
 		#region Private Fields
 
 		/// <summary>
@@ -94,11 +103,6 @@ namespace libanimus {
 		/// The GUID.
 		/// </summary>
 		readonly Guid guid;
-
-		/// <summary>
-		/// The identifier.
-		/// </summary>
-		readonly string id;
 
 		/// <summary>
 		/// The validation callback.
@@ -113,7 +117,7 @@ namespace libanimus {
 		public IrcClient () {
 			actions = new List<HostAction> ();
 			guid = Guid.NewGuid ();
-			id = string.Format ("animus{0}", new string (guid.ToString ("N").Take (16).ToArray ()));
+			Identifier = string.Format ("animus{0}", new string (guid.ToString ("N").Take (16).ToArray ()));
 			IsConnected = false;
 			HasJoined = false;
 			OnChannelMessage += (message, sender) => {
