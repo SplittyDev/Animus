@@ -36,8 +36,8 @@ namespace libanimus
 
 		static string[] ListGeneric (string entryPoint, string queryProduct) {
 			var query = string.Format ("SELECT * FROM {0}", queryProduct);
-			var str = string.Format ("\\{0}{1}", Environment.MachineName, entryPoint);
-			return new ManagementObjectSearcher (str, query)
+			var entry = string.Format ("\\root\\{0}", entryPoint);
+			return new ManagementObjectSearcher (entry, query)
 				.Get ()
 				.GetManagementObjects ()
 				.Select (obj => obj["displayName"].ToString ())
