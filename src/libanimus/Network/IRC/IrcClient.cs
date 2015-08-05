@@ -142,8 +142,10 @@ namespace libanimus {
 			if (validationCallback == null)
 				validationCallback = new RemoteCertificateValidationCallback
 					((sender, certificate, chain, sslPolicyErrors) => true);
-			_Connect (server, port, ssl);
-			while (!IsConnected) {}
+			Task.Factory.StartNew (() => _Connect (server, port, ssl));
+			while (!IsConnected) {
+			}
+			Task.Factory.StartNew (_Listen);
 		}
 
 		/// <summary>
@@ -206,7 +208,8 @@ namespace libanimus {
 		public void LogIn (string username, string realname, string nickname) {
 			USER (username, realname);
 			NICK (nickname);
-			while (!HasJoined) {}
+			while (!HasJoined) {
+			}
 		}
 
 		public void Mode (string mode) {
@@ -260,8 +263,6 @@ namespace libanimus {
 
 			Reader = new StreamReader (Stream);
 			Writer = new StreamWriter (Stream);
-
-			Task.Factory.StartNew (_Listen);
 		}
 
 		/// <summary>
