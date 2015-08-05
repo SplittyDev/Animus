@@ -7,9 +7,26 @@ namespace libanimus
 {
 	public static class Antivirus
 	{
-		public static string[] List () {
+		public const string ENTRY_WIN_NT5 = "rootSecurityCenter";
+		public const string ENTRY_WIN_NT6 = "rootSecurityCenter2";
+
+		public static string[] ListAntivirus () {
+			return ListProduct ("AntivirusProduct");
+		}
+
+		public static string[] ListAntispyware () {
+			return ListProduct ("AntispywareProduct");
+		}
+
+		public static string[] ListFirewalls () {
+			return ListProduct ("FirewallProduct");
+		}
+
+		static string[] ListProduct (string product) {
 			try {
-				return Environment.OSVersion.Version.Major > 5 ? ListVistaPlus () : ListXP ();
+				return Environment.OSVersion.Version.Major > 5 ?
+					ListGeneric (ENTRY_WIN_NT6, product) :
+					ListGeneric (ENTRY_WIN_NT5, product);
 			}
 			catch (Exception) {
 				// Add error logging here
@@ -17,18 +34,8 @@ namespace libanimus
 			}
 		}
 
-		static string[] ListXP () {
-			const string entry = "rootSecurityCenter";
-			return ListGeneric (entry);
-		}
-
-		static string[] ListVistaPlus () {
-			const string entry = "rootSecurityCenter2";
-			return ListGeneric (entry);
-		}
-
-		static string[] ListGeneric (string entryPoint) {
-			const string query = "SELECT * FROM AntivirusProduct";
+		static string[] ListGeneric (string entryPoint, string queryProduct) {
+			var query = string.Format ("SELECT * FROM {0}", queryProduct);
 			var str = string.Format ("\\{0}{1}", Environment.MachineName, entryPoint);
 			return new ManagementObjectSearcher (str, query)
 				.Get ()
