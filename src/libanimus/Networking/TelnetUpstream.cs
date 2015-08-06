@@ -16,9 +16,9 @@ namespace libanimus.Networking
 	public class TelnetUpstream : IUpstream
 	{
 		public readonly List<TcpClient> Clients;
-		readonly TcpListener listener;
 		readonly Dictionary<TcpClient, List<string>> notifications;
 		readonly List<string> globalLog;
+		TcpListener listener;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="libanimus.Networking.TelnetUpstream"/> class.
@@ -37,7 +37,18 @@ namespace libanimus.Networking
 				NetworkManager.Instance.Broadcast ("Failed to start telnet client.");
 				return;
 			}
-			Task.Factory.StartNew (Listen);
+			Task.Factory.StartNew (Listen).ContinueWith (task => {
+				if (task.IsFaulted) {
+					// Log exception here
+					Console.WriteLine ("Telnet listener task faulted.");
+				}
+				try {
+					listener.Stop ();
+				}
+				finally {
+					listener = null;
+				}
+			});
 		}
 
 		/// <summary>
