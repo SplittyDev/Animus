@@ -80,6 +80,11 @@ namespace libanimus.Networking {
 		/// </summary>
 		public event MessageHandler OnPrivateMessage;
 
+		/// <summary>
+		/// Occurs when the clients gets disconnected from the irc.
+		/// </summary>
+		public event EventHandler OnDisconnect;
+
 		#endregion
 
 		#region Public Fields
@@ -113,6 +118,11 @@ namespace libanimus.Networking {
 		/// </summary>
 		string connection_lasterror;
 
+		/// <summary>
+		/// The client.
+		/// </summary>
+		TcpClient client;
+
 		#endregion
 
 		/// <summary>
@@ -123,6 +133,7 @@ namespace libanimus.Networking {
 			Identifier = string.Format ("animus{0}", new string (guid.ToString ("N").Take (16).ToArray ()));
 			OnChannelMessage += (message, sender) => { };
 			OnPrivateMessage += (message, sender) => { };
+			OnDisconnect += (sender, e) => { };
 		}
 
 		/// <summary>
@@ -154,14 +165,16 @@ namespace libanimus.Networking {
 				} catch {
 					try {
 						Stream.Close ();
+						Stream.Dispose ();
 					} catch {
 						// Log exception here
 					}
 				}
 			}).ContinueWith (task => {
+				Console.WriteLine ("Disconnected from IRC.");
 				if (task.IsFaulted)
 					Console.WriteLine ("IRCClient listener task faulted.");
-				Connect (Server, Port, ssl, validationCallback);
+				OnDisconnect (this, EventArgs.Empty);
 			});
 		}
 
@@ -262,7 +275,7 @@ namespace libanimus.Networking {
 			Server = server;
 			Port = port;
 
-			var client = new TcpClient (Server, Port);
+			client = new TcpClient (Server, Port);
 			Stream = client.GetStream ();
 
 			if (!client.Connected) {
@@ -294,8 +307,11 @@ namespace libanimus.Networking {
 		/// </summary>
 		void _Listen () {
 			string line;
-			while (true) {
-				while ((line = Reader.ReadLine ()) != null) {
+			while (client.Connected && !Reader.EndOfStream) {
+				line = null;
+				var task = Task.Factory.StartNew (() => line = Reader.ReadLine ());
+				task.Wait (10000);
+				if (line != null) {
 					var commandParts = line.TrimStart (':').Split (' ');
 
 					string ident = string.Empty;

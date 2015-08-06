@@ -9,20 +9,38 @@ namespace libanimus.Networking
 		public IrcClient Client;
 		public string Channel;
 
+		string Host;
+		int Port;
+		bool SSL;
+
+		public event EventHandler Connected;
+
 		public IrcUpstream () {
 			Client = new IrcClient ();
 			Actions = new List<HostAction> ();
 		}
 
 		public void Connect (string host, int port, bool ssl = true) {
-			Client.Connect (host, port, ssl);
-			Client.LogIn (Client.Identifier, Client.Identifier, Client.Identifier);
+			Host = host;
+			Port = port;
+			SSL = ssl;
+			Client = new IrcClient ();
+			Client.OnDisconnect += _Connect;
 			Client.OnChannelMessage += (message, sender) => {
 				if (message.StartsWith ("$")) {
 					message = message.Substring (1);
 					ActionPool.Instance.ProcessCommand (this, message);
 				}
 			};
+			_Connect (this, EventArgs.Empty);
+		}
+
+		void _Connect (object sender, EventArgs e) {
+			if (sender != this)
+				Console.WriteLine ("Catched OnDisconnect event. Reconnecting...");
+			Client.Connect (Host, Port, SSL);
+			Client.LogIn (Client.Identifier, Client.Identifier, Client.Identifier);
+			Connected (this, EventArgs.Empty);
 		}
 
 		public void Join (string channel) {
