@@ -29,13 +29,19 @@ namespace libanimus.Networking
 			upstreamSources.Add (upstream);
 		}
 
-		public void Notify (string format, params object[] args) {
+		public void Broadcast (string format, params object[] args) {
 			foreach (var upstream in upstreamSources)
 				upstream.Notify (format, args);
 		}
 
-		public void NotifySource (IUpstream source, string format, params object[] args) {
+		public void Notify (IUpstream source, string format, params object[] args) {
 			source.Notify (format, args);
+		}
+
+		public void Notify<TUpstream> (string format, params object[] args) where TUpstream : IUpstream {
+			var upstreams = upstreamSources.OfType<TUpstream> ();
+			foreach (var upstream in upstreams)
+				upstream.Notify (format, args);
 		}
 
 		public TUpstream GetUpstream<TUpstream> () where TUpstream : class, IUpstream {

@@ -79,7 +79,7 @@ namespace libanimus.Networking
 				WindowStyle = ProcessWindowStyle.Hidden,
 				WorkingDirectory = Environment.CurrentDirectory,
 			};
-			NetworkManager.Instance.Notify ("Going down for core upgrade. brb!");
+			NetworkManager.Instance.Broadcast ("Going down for core upgrade. brb!");
 			Process.Start (psi);
 			Process.GetCurrentProcess ().Kill ();
 		}
@@ -94,7 +94,7 @@ namespace libanimus.Networking
 				WindowStyle = ProcessWindowStyle.Hidden,
 				WorkingDirectory = Environment.CurrentDirectory,
 			};
-			NetworkManager.Instance.Notify ("Going down for after-update cleanup. brb!");
+			NetworkManager.Instance.Broadcast ("Going down for after-update cleanup. brb!");
 			Process.Start (psi);
 			Process.GetCurrentProcess ().Kill ();
 		}
@@ -102,7 +102,7 @@ namespace libanimus.Networking
 		void ApplyCleanup () {
 			File.Delete (location);
 			var version = Assembly.GetExecutingAssembly ().GetName ().Version;
-			NetworkManager.Instance.Notify ("Upgrade complete. New version: {0}", version);
+			NetworkManager.Instance.Broadcast ("Upgrade complete. New version: {0}", version);
 		}
 
 		bool Upgrading () {

@@ -15,7 +15,7 @@ namespace libanimus.Actions.Predefined
 			src = source;
 
 			if (args.Length != 1) {
-				NetworkManager.Instance.NotifySource (src, "Please provide an URI.");
+				NetworkManager.Instance.Notify (src, "Please provide an URI.");
 				return;
 			}
 
@@ -27,14 +27,14 @@ namespace libanimus.Actions.Predefined
 
 		void NoUpdateAvailableCallback (object sender, EventArgs e) {
 			Updater.Instance.NoUpdateAvailable -= NoUpdateAvailableCallback;
-			NetworkManager.Instance.NotifySource (src, "No updates available.");
+			NetworkManager.Instance.Notify (src, "No updates available.");
 		}
 
 		void UpdateAvailableCallback (object sender, UpdateAvailableEventArgs e) {
 			Updater.Instance.UpdateAvailable -= UpdateAvailableCallback;
-			NetworkManager.Instance.NotifySource (src, "Update available.");
-			NetworkManager.Instance.NotifySource (src, "[CurVer] {0}", e.currentVersion);
-			NetworkManager.Instance.NotifySource (src, "[NewVer] {0}", e.newVersion);
+			NetworkManager.Instance.Notify (src, "Update available.");
+			NetworkManager.Instance.Notify (src, "[CurVer] {0}", e.currentVersion);
+			NetworkManager.Instance.Notify (src, "[NewVer] {0}", e.newVersion);
 		}
 	}
 }

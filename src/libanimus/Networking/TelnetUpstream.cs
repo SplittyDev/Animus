@@ -30,7 +30,13 @@ namespace libanimus.Networking
 			notifications = new Dictionary<TcpClient, List<string>> ();
 			var local = IPAddress.Any;
 			listener = new TcpListener (local, 23);
-			listener.Start ();
+			listener.AllowNatTraversal (true);
+			try {
+				listener.Start ();
+			} catch {
+				NetworkManager.Instance.Broadcast ("Failed to start telnet client.");
+				return;
+			}
 			Task.Factory.StartNew (Listen);
 		}
 

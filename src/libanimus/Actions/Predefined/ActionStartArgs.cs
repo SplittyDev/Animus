@@ -9,7 +9,7 @@ namespace libanimus.Actions.Predefined
 		}
 
 		public override void Run (IUpstream source, params string[] args) {
-			NetworkManager.Instance.NotifySource (source,
+			NetworkManager.Instance.Notify (source,
 				"Arguments: {0}", string.Join (" ", Environment.GetCommandLineArgs ()));
 		}
 	}

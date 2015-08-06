@@ -15,7 +15,7 @@ namespace libanimus.Actions.Predefined
 			this.args = args;
 
 			if (args.Length != 1) {
-				NetworkManager.Instance.NotifySource (source, "Please provide an URI.");
+				NetworkManager.Instance.Notify (source, "Please provide an URI.");
 				return;
 			}
 
@@ -27,7 +27,7 @@ namespace libanimus.Actions.Predefined
 
 		static void NoUpdateAvailableCallback (object sender, EventArgs e) {
 			Updater.Instance.NoUpdateAvailable -= NoUpdateAvailableCallback;
-			NetworkManager.Instance.Notify ("No updates available.");
+			NetworkManager.Instance.Broadcast ("No updates available.");
 		}
 
 		void UpdateAvailableCallback (object sender, UpdateAvailableEventArgs e) {

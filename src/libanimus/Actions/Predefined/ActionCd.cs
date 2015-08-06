@@ -17,7 +17,7 @@ namespace libanimus.Actions.Predefined
 				if (Directory.Exists (path))
 					Environment.CurrentDirectory = args [0];
 			} else
-				NetworkManager.Instance.NotifySource (source, "Invalid path.");
+				NetworkManager.Instance.Notify (source, "Invalid path.");
 		}
 	}
 }

