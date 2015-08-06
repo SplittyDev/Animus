@@ -54,12 +54,11 @@
     <Compile Include="Actions\Predefined\ActionPwd.cs" />
     <Compile Include="Actions\HostAction.cs" />
     <Compile Include="Networking\Command.cs" />
-    <Compile Include="Networking\IRC\IrcClient.cs" />
-    <Compile Include="Networking\IRC\ConnectionFailedException.cs" />
     <Compile Include="Networking\IUpstream.cs" />
     <Compile Include="Networking\IrcUpstream.cs" />
     <Compile Include="Networking\NetworkManager.cs" />
     <Compile Include="Networking\TelnetUpstream.cs" />
+    <Compile Include="Networking\IrcClient.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -80,7 +79,5 @@
     <Folder Include="Actions\" />
     <Folder Include="Actions\Predefined\" />
     <Folder Include="Networking\" />
-    <Folder Include="Networking\IRC\" />
-    <Folder Include="Actions\Telnet\" />
   </ItemGroup>
 </Project>

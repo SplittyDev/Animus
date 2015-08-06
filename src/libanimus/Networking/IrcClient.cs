@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace libanimus.Networking.IRC {
+namespace libanimus.Networking {
 	public class IrcClient {
 		#region Public Properties
 
