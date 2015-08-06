@@ -6,33 +6,35 @@ namespace libanimus.Actions.Predefined
 {
 	public class ActionUpdate : HostAction
 	{
+		IUpstream src;
+
 		public ActionUpdate () : base ("update") {
 		}
 
 		public override void Run (IUpstream source, params string[] args) {
-			
+			src = source;
+
 			if (args.Length != 1) {
-				NetworkManager.Instance.Notify ("Please provide an URI.");
+				NetworkManager.Instance.NotifySource (src, "Please provide an URI.");
 				return;
 			}
 
-			Updater.Instance.UpdateAvailable -= UpdateAvailableCallback;
 			Updater.Instance.UpdateAvailable += UpdateAvailableCallback;
-
-			Updater.Instance.NoUpdateAvailable -= NoUpdateAvailableCallback;
 			Updater.Instance.NoUpdateAvailable += NoUpdateAvailableCallback;
 
 			Updater.Instance.CheckUpdate (args.First ());
 		}
 
-		static void NoUpdateAvailableCallback (object sender, EventArgs e) {
-			NetworkManager.Instance.Notify ("No updates available.");
+		void NoUpdateAvailableCallback (object sender, EventArgs e) {
+			Updater.Instance.NoUpdateAvailable -= NoUpdateAvailableCallback;
+			NetworkManager.Instance.NotifySource (src, "No updates available.");
 		}
 
-		static void UpdateAvailableCallback (object sender, UpdateAvailableEventArgs e) {
-			NetworkManager.Instance.Notify ("Update available.");
-			NetworkManager.Instance.Notify ("[CurVer] {0}", e.currentVersion);
-			NetworkManager.Instance.Notify ("[NewVer] {0}", e.newVersion);
+		void UpdateAvailableCallback (object sender, UpdateAvailableEventArgs e) {
+			Updater.Instance.UpdateAvailable -= UpdateAvailableCallback;
+			NetworkManager.Instance.NotifySource (src, "Update available.");
+			NetworkManager.Instance.NotifySource (src, "[CurVer] {0}", e.currentVersion);
+			NetworkManager.Instance.NotifySource (src, "[NewVer] {0}", e.newVersion);
 		}
 	}
 }

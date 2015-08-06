@@ -64,10 +64,12 @@
     <Compile Include="Networking\UpdatePreparedEventArgs.cs" />
     <Compile Include="Actions\Predefined\ActionUpdate.cs" />
     <Compile Include="Actions\Predefined\ActionUpgrade.cs" />
-    <Compile Include="Actions\Predefined\ActionQuit.cs" />
     <Compile Include="Actions\Predefined\ActionStartArgs.cs" />
     <Compile Include="Actions\Predefined\ActionDetect.cs" />
     <Compile Include="Actions\Predefined\ActionAutoUpgrade.cs" />
+    <Compile Include="Native\GetModuleHandle.cs" />
+    <Compile Include="Internal\SandboxInfo.cs" />
+    <Compile Include="Actions\Predefined\ActionKill.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

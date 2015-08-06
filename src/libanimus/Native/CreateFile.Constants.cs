@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace libanimus
+namespace libanimus.Native
 {
 	public static partial class Native
 	{

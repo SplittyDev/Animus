@@ -116,14 +116,11 @@ namespace libanimus.Networking {
 		#endregion
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="libanimus.IrcClient"/> class.
+		/// Initializes a new instance of the <see cref="IrcClient"/> class.
 		/// </summary>
 		public IrcClient () {
 			guid = Guid.NewGuid ();
 			Identifier = string.Format ("animus{0}", new string (guid.ToString ("N").Take (16).ToArray ()));
-			IsConnected = false;
-			HasJoined = false;
-			connection_error = false;
 			OnChannelMessage += (message, sender) => { };
 			OnPrivateMessage += (message, sender) => { };
 		}
@@ -136,6 +133,9 @@ namespace libanimus.Networking {
 		/// <param name="ssl">Whether the connection should use SSL..</param>
 		/// <param name="callback">The callback that checks the SSL certificate for validity</param> 
 		public void Connect (string server, int port, bool ssl, RemoteCertificateValidationCallback callback = null) {
+			IsConnected = false;
+			HasJoined = false;
+			connection_error = false;
 			validationCallback = callback;
 			if (validationCallback == null)
 				validationCallback = new RemoteCertificateValidationCallback
@@ -148,7 +148,21 @@ namespace libanimus.Networking {
 			}
 			while (!IsConnected) {
 			}
-			Task.Factory.StartNew (_Listen);
+			Task.Factory.StartNew (() => {
+				try {
+					_Listen ();
+				} catch {
+					try {
+						Stream.Close ();
+					} catch {
+						// Log exception here
+					}
+				}
+			}).ContinueWith (task => {
+				if (task.IsFaulted)
+					Console.WriteLine ("IRCClient listener task faulted.");
+				Connect (Server, Port, ssl, validationCallback);
+			});
 		}
 
 		/// <summary>

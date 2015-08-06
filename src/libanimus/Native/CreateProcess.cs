@@ -1,7 +1,7 @@
-﻿﻿using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
-namespace libanimus
+namespace libanimus.Native
 {
 	public static partial class Native
 	{

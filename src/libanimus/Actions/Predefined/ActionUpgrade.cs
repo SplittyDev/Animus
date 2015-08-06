@@ -12,7 +12,7 @@ namespace libanimus.Actions.Predefined
 		public override void Run (IUpstream source, params string[] args) {
 			
 			if (args.Length != 1) {
-				NetworkManager.Instance.Notify ("Please provide an URI.");
+				NetworkManager.Instance.NotifySource (source, "Please provide an URI.");
 				return;
 			}
 

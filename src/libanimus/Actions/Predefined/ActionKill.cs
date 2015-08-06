@@ -4,9 +4,9 @@ using libanimus.Networking;
 
 namespace libanimus.Actions.Predefined
 {
-	public class ActionQuit : HostAction
+	public class ActionKill : HostAction
 	{
-		public ActionQuit () : base ("quit") {
+		public ActionKill () : base ("kill") {
 		}
 
 		public override void Run (IUpstream source, params string[] args) {

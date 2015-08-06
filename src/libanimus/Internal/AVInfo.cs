@@ -18,12 +18,17 @@ namespace libanimus.Internal
 		}
 
 		public bool IsMatch () {
-			var root = Path.GetPathRoot (Environment.GetFolderPath (Environment.SpecialFolder.ProgramFiles));
-			var result1 = Directory.Exists (Path.Combine (root, "Program Files", RelativePath));
-			var result2 = result1;
-			if (Directory.Exists (Path.Combine (root, "Program Files (x86)")))
-				result2 = Directory.Exists (Path.Combine (root, "Program Files (x86)", RelativePath));
-			return result1 || result2;
+			try {
+				var root = Path.GetPathRoot (Environment.GetFolderPath (Environment.SpecialFolder.ProgramFiles));
+				var result1 = Directory.Exists (Path.Combine (root, "Program Files", RelativePath));
+				var result2 = result1;
+				if (Directory.Exists (Path.Combine (root, "Program Files (x86)")))
+					result2 = Directory.Exists (Path.Combine (root, "Program Files (x86)", RelativePath));
+				return result1 || result2;
+			} catch {
+				// Add exception logging here
+				return false;
+			}
 		}
 	}
 }

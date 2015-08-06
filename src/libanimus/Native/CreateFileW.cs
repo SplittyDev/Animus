@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
-namespace libanimus
+namespace libanimus.Native
 {
 	public static partial class Native
 	{

@@ -15,24 +15,23 @@ namespace libanimus.Actions.Predefined
 			this.args = args;
 
 			if (args.Length != 1) {
-				NetworkManager.Instance.Notify ("Please provide an URI.");
+				NetworkManager.Instance.NotifySource (source, "Please provide an URI.");
 				return;
 			}
 
-			Updater.Instance.UpdateAvailable -= UpdateAvailableCallback;
 			Updater.Instance.UpdateAvailable += UpdateAvailableCallback;
-
-			Updater.Instance.NoUpdateAvailable -= NoUpdateAvailableCallback;
 			Updater.Instance.NoUpdateAvailable += NoUpdateAvailableCallback;
 
 			Updater.Instance.CheckUpdate (args.First ());
 		}
 
 		static void NoUpdateAvailableCallback (object sender, EventArgs e) {
+			Updater.Instance.NoUpdateAvailable -= NoUpdateAvailableCallback;
 			NetworkManager.Instance.Notify ("No updates available.");
 		}
 
 		void UpdateAvailableCallback (object sender, UpdateAvailableEventArgs e) {
+			Updater.Instance.UpdateAvailable -= UpdateAvailableCallback;
 			Updater.Instance.DownloadUpdate (args.First ());
 		}
 	}
