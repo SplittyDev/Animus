@@ -59,6 +59,15 @@
     <Compile Include="Networking\NetworkManager.cs" />
     <Compile Include="Networking\TelnetUpstream.cs" />
     <Compile Include="Networking\IrcClient.cs" />
+    <Compile Include="Networking\Updater.cs" />
+    <Compile Include="Networking\UpdateAvailableEventArgs.cs" />
+    <Compile Include="Networking\UpdatePreparedEventArgs.cs" />
+    <Compile Include="Actions\Predefined\ActionUpdate.cs" />
+    <Compile Include="Actions\Predefined\ActionUpgrade.cs" />
+    <Compile Include="Actions\Predefined\ActionQuit.cs" />
+    <Compile Include="Actions\Predefined\ActionStartArgs.cs" />
+    <Compile Include="Actions\Predefined\ActionDetect.cs" />
+    <Compile Include="Actions\Predefined\ActionAutoUpgrade.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

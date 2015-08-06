@@ -11,9 +11,6 @@ namespace libanimus.Networking
 	{
 		List<HostAction> Actions { get; }
 
-		bool CheckUpdate ();
-		void Update ();
-
 		// Communication
 		void Notify (string format, params object[] args);
 	}

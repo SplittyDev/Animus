@@ -35,14 +35,6 @@ namespace libanimus.Networking
 
 		public List<HostAction> Actions { get; private set; }
 
-		public bool CheckUpdate () {
-			throw new NotImplementedException ();
-		}
-
-		public void Update () {
-			throw new NotImplementedException ();
-		}
-
 		public void Notify (string format, params object[] args) {
 			Client.Message (string.Format (format, args), Channel);
 		}
