@@ -21,10 +21,11 @@ namespace libanimus
 		}
 
 		/// <summary>
-		/// Runs the specified command.
+		/// Runs this command.
 		/// </summary>
-		/// <param name="args"></param>
-		public virtual void Run (params string[] args) {
+		/// <param name="source">Source.</param>
+		/// <param name="args">Arguments.</param>
+		public virtual void Run (IUpstream source, params string[] args) {
 		}
 	}
 }

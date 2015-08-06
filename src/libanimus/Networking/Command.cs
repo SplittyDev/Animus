@@ -21,11 +21,19 @@ namespace libanimus
 		public string[] Args;
 
 		/// <summary>
+		/// The source.
+		/// </summary>
+		public IUpstream Source;
+
+		/// <summary>
 		/// Parses the specified command.
 		/// </summary>
 		/// <param name="com">The command.</param>
-		public static Command Parse (string com) {
+		/// <param name="source">The source.</param> 
+		public static Command Parse (string com, IUpstream source = null) {
 			var command = new Command ();
+			command.Source = source;
+			com = com.Trim ();
 			if (com.Contains (" ")) {
 				command.Name = new string (com.TakeWhile (c => c != ' ').ToArray ());
 				var argstr = new string (com.Skip (com.IndexOf (' ') + 1).ToArray ());

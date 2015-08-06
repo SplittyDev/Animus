@@ -26,16 +26,24 @@ namespace libanimus
 		}
 
 		public void ProcessCommand (Command com) {
-			var acts = from act in actions
-			           where act.Name.ToLowerInvariant () == com.Name.ToLowerInvariant ()
-			           select act;
-			foreach (var act in acts)
-				act.Run (com.Args);
+			ProcessCommandOn (actions, com);
 		}
 
-		public void ProcessCommand (string command) {
-			var com = Command.Parse (command);
-			ProcessCommand (com);
+		public void ProcessCommand (IUpstream source, string command) {
+			ProcessCommandOn (actions, source, command);
+		}
+
+		public void ProcessCommandOn (List<HostAction> actions, Command com) {
+			var acts = from act in actions
+					where act.Name.ToLowerInvariant () == com.Name.ToLowerInvariant ()
+				select act;
+			foreach (var act in acts)
+				act.Run (com.Source, com.Args);
+		}
+
+		public void ProcessCommandOn (List<HostAction> actions, IUpstream source, string command) {
+			var com = Command.Parse (command, source);
+			ProcessCommandOn (actions, com);
 		}
 
 		public void RegisterAction (HostAction action) {

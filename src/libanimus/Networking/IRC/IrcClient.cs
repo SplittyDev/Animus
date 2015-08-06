@@ -104,6 +104,16 @@ namespace libanimus {
 		/// </summary>
 		RemoteCertificateValidationCallback validationCallback;
 
+		/// <summary>
+		/// A flag indicating whether a connection error occurred.
+		/// </summary>
+		bool connection_error;
+
+		/// <summary>
+		/// The last connection error.
+		/// </summary>
+		string connection_lasterror;
+
 		#endregion
 
 		/// <summary>
@@ -114,6 +124,7 @@ namespace libanimus {
 			Identifier = string.Format ("animus{0}", new string (guid.ToString ("N").Take (16).ToArray ()));
 			IsConnected = false;
 			HasJoined = false;
+			connection_error = false;
 			OnChannelMessage += (message, sender) => { };
 			OnPrivateMessage += (message, sender) => { };
 		}
@@ -130,10 +141,27 @@ namespace libanimus {
 			if (validationCallback == null)
 				validationCallback = new RemoteCertificateValidationCallback
 					((sender, certificate, chain, sslPolicyErrors) => true);
-			Task.Factory.StartNew (() => _Connect (server, port, ssl));
+			_Connect (server, port, ssl);
+			if (connection_error) {
+				Console.WriteLine ("Error while trying to connect.");
+				Console.WriteLine ("Call GetLastError to get the exception message.");
+				return;
+			}
 			while (!IsConnected) {
 			}
 			Task.Factory.StartNew (_Listen);
+		}
+
+		/// <summary>
+		/// Gets the last error.
+		/// </summary>
+		/// <returns>The last error.</returns>
+		public string GetLastError () {
+			if (connection_error) {
+				connection_error = false;
+				return connection_lasterror;
+			}
+			return string.Empty;
 		}
 
 		/// <summary>
@@ -142,6 +170,8 @@ namespace libanimus {
 		/// <param name="format">Format.</param>
 		/// <param name="args">Arguments.</param>
 		public void SendRaw (string format, params object[] args) {
+			if (!IsConnected)
+				return;
 			var sb = new StringBuilder ();
 			sb.AppendFormat (format, args);
 			sb.Append ("\r\n");
@@ -224,7 +254,8 @@ namespace libanimus {
 
 			if (!client.Connected) {
 				var exceptionText = string.Format ("Could not connect to {0}:{1}", Server, Port);
-				throw new ConnectionFailedException (exceptionText);
+				connection_error = true;
+				connection_lasterror = exceptionText;
 			}
 
 			if (ssl) {

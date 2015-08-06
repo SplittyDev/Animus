@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace libanimus
 {
@@ -9,15 +10,16 @@ namespace libanimus
 
 		public IrcUpstream () {
 			Client = new IrcClient ();
+			Actions = new List<HostAction> ();
 		}
 
 		public void Connect (string host, int port, bool ssl = true) {
 			Client.Connect (host, port, ssl);
 			Client.LogIn (Client.Identifier, Client.Identifier, Client.Identifier);
 			Client.OnChannelMessage += (message, sender) => {
-				if (message.StartsWith ("$$")) {
-					message = message.Substring (2);
-					ActionPool.Instance.ProcessCommand (message);
+				if (message.StartsWith ("$")) {
+					message = message.Substring (1);
+					ActionPool.Instance.ProcessCommand (this, message);
 				}
 			};
 		}
@@ -29,6 +31,8 @@ namespace libanimus
 		}
 
 		#region IUpstream implementation
+
+		public List<HostAction> Actions { get; private set; }
 
 		public bool CheckUpdate () {
 			throw new NotImplementedException ();

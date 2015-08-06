@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace libanimus
 {
@@ -7,6 +8,8 @@ namespace libanimus
 	/// </summary>
 	public interface IUpstream
 	{
+		List<HostAction> Actions { get; }
+
 		bool CheckUpdate ();
 		void Update ();
 
