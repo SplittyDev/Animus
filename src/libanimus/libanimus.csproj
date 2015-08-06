@@ -49,7 +49,9 @@
     <Compile Include="Network\HostAction.cs" />
     <Compile Include="Network\IRC\IrcClient.cs" />
     <Compile Include="Network\IRC\ConnectionFailedException.cs" />
-    <Compile Include="Windows\Antivirus.cs" />
+    <Compile Include="Windows\Detector.cs" />
+    <Compile Include="Windows\Internal\VMInfo.cs" />
+    <Compile Include="Windows\Internal\AVInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -69,5 +71,6 @@
     <Folder Include="Network\" />
     <Folder Include="Network\IRC\" />
     <Folder Include="Windows\" />
+    <Folder Include="Windows\Internal\" />
   </ItemGroup>
 </Project>
