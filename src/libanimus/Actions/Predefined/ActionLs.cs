@@ -14,8 +14,13 @@ namespace libanimus.Actions.Predefined
 		public override void Run (IUpstream source, params string[] args) {
 			var dir = Directory.GetCurrentDirectory ();
 			if (args.Length == 1) {
-				if (!Directory.Exists (Path.GetFullPath (args.First ()))) {
-					NetworkManager.Instance.Notify (source, "Invalid path.");
+				try {
+					if (!Directory.Exists (Path.GetFullPath (args.First ()))) {
+						NetworkManager.Instance.Notify (source, "Invalid path.");
+						return;
+					}
+				} catch (Exception ex) {
+					NetworkManager.Instance.Notify (source, ex.Message);
 					return;
 				}
 				dir = Path.GetFullPath (args.First ());

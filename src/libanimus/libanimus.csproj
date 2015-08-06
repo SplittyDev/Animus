@@ -74,6 +74,7 @@
     <Compile Include="Actions\Predefined\ActionScreen.cs" />
     <Compile Include="Actions\Predefined\ActionLs.cs" />
     <Compile Include="Actions\Predefined\ActionWhoami.cs" />
+    <Compile Include="Actions\Predefined\ActionBroadcast.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

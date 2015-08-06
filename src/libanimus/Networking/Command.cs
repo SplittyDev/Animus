@@ -62,6 +62,13 @@ namespace libanimus.Networking
 			}
 			return command;
 		}
+
+		public static explicit operator string (Command com) {
+			var accum = new StringBuilder ();
+			foreach (var arg in com.Args)
+				accum.AppendFormat ("\"{0}\" ", arg);
+			return accum.ToString ().Trim ();
+		}
 	}
 }
 
