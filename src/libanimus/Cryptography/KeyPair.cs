@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace libanimus
+namespace libanimus.Cryptography
 {
 	/// <summary>
 	/// A private/public key pair.

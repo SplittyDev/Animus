@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace libanimus
+namespace libanimus.Extensibility
 {
 	/// <summary>
 	/// The Animus module interface.

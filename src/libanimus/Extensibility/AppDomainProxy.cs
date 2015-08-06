@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Security;
 using System.Security.Policy;
 
-namespace libanimus
+namespace libanimus.Extensibility
 {
 	/// <summary>
 	/// App domain proxy.
@@ -24,7 +24,7 @@ namespace libanimus
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="libanimus.AppDomainProxy"/> class.
+		/// Initializes a new instance of the <see cref="AppDomainProxy"/> class.
 		/// </summary>
 		AppDomainProxy () {
 			var evidence = new Evidence ();

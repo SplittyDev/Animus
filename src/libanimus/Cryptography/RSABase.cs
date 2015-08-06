@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace libanimus
+namespace libanimus.Cryptography
 {
 	/// <summary>
 	/// RSA encryption provider base.

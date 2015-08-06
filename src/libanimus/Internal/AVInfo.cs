@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace libanimus
+namespace libanimus.Internal
 {
 	public class AVInfo
 	{

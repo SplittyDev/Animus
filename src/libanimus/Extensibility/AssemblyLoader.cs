@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace libanimus
+namespace libanimus.Extensibility
 {
 	/// <summary>
 	/// Assembly loader.

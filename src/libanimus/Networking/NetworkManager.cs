@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace libanimus
+namespace libanimus.Networking
 {
 	public class NetworkManager
 	{

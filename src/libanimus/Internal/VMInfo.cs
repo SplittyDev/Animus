@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Management;
 
-namespace libanimus
+namespace libanimus.Internal
 {
 	class VMInfo
 	{

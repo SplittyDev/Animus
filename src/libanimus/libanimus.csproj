@@ -67,6 +67,7 @@
       <Properties>
         <Policies>
           <VersionControlPolicy inheritsSet="Mono" />
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="FileFormatDefault" />
         </Policies>
       </Properties>
     </MonoDevelop>
@@ -78,8 +79,8 @@
     <Folder Include="Native\" />
     <Folder Include="Actions\" />
     <Folder Include="Actions\Predefined\" />
-    <Folder Include="Actions\Predefined\Telnet\" />
     <Folder Include="Networking\" />
     <Folder Include="Networking\IRC\" />
+    <Folder Include="Actions\Telnet\" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace libanimus
+namespace libanimus.Cryptography
 {
 	/// <summary>
 	/// RSA encryption provider.
@@ -13,7 +13,7 @@ namespace libanimus
 		KeyPair keyPair;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="libanimus.RSA"/> class.
+		/// Initializes a new instance of the <see cref="RSA"/> class.
 		/// </summary>
 		/// <param name="publicKey">Public key.</param>
 		public RSA (string publicKey) {
@@ -21,7 +21,7 @@ namespace libanimus
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="libanimus.RSA"/> class.
+		/// Initializes a new instance of the <see cref="RSA"/> class.
 		/// </summary>
 		/// <param name="publicKey">Public key.</param>
 		/// <param name="privateKey">Private key.</param>
@@ -30,7 +30,7 @@ namespace libanimus
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="libanimus.RSA"/> class.
+		/// Initializes a new instance of the <see cref="RSA"/> class.
 		/// </summary>
 		/// <param name="keyPair">Key pair.</param>
 		public RSA (KeyPair keyPair) {

@@ -7,8 +7,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using libanimus.Actions;
 
-namespace libanimus
+namespace libanimus.Networking
 {
 	public class TelnetUpstream : IUpstream
 	{

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using libanimus.Actions;
+using libanimus.Networking.IRC;
 
-namespace libanimus
+namespace libanimus.Networking
 {
 	public class IrcUpstream : IUpstream
 	{

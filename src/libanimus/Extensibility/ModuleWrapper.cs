@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace libanimus
+namespace libanimus.Extensibility
 {
 	/// <summary>
 	/// Module wrapper.
@@ -18,7 +18,7 @@ namespace libanimus
 		public readonly IModule Module;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="libanimus.ModuleWrapper"/> class.
+		/// Initializes a new instance of the <see cref="ModuleWrapper"/> class.
 		/// </summary>
 		/// <param name="proxy">Proxy.</param>
 		/// <param name="module">Module.</param>

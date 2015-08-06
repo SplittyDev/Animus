@@ -1,6 +1,7 @@
 ﻿using System;
+using libanimus.Networking;
 
-namespace libanimus
+namespace libanimus.Actions.Predefined
 {
 	public class ActionPwd : HostAction
 	{

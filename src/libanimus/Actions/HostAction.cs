@@ -1,6 +1,7 @@
 ﻿using System;
+using libanimus.Networking;
 
-namespace libanimus
+namespace libanimus.Actions
 {
 	/// <summary>
 	/// Host action.
@@ -13,7 +14,7 @@ namespace libanimus
 		public readonly string Name;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="libanimus.HostAction"/> class.
+		/// Initializes a new instance of the <see cref="libanimus.Actions.HostAction"/> class.
 		/// </summary>
 		/// <param name="name">Name.</param>
 		public HostAction (string name) {

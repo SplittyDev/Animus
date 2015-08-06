@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using libanimus.Actions;
 
-namespace libanimus
+namespace libanimus.Networking
 {
 	/// <summary>
 	/// Upstream.

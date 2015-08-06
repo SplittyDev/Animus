@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
+using libanimus.Networking;
 
-namespace libanimus
+namespace libanimus.Actions.Predefined
 {
 	public class ActionCd : HostAction
 	{

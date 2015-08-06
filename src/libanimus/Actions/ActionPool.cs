@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using libanimus.Networking;
 
-namespace libanimus
+namespace libanimus.Actions
 {
 	public class ActionPool
 	{

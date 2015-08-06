@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace libanimus
+namespace libanimus.Extensibility
 {
 	/// <summary>
 	/// Module pool.
@@ -16,7 +16,7 @@ namespace libanimus
 		public readonly List<ModuleWrapper> modules;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="libanimus.ModulePool"/> class.
+		/// Initializes a new instance of the <see cref="ModulePool"/> class.
 		/// </summary>
 		public ModulePool () {
 			modules = new List<ModuleWrapper> ();
