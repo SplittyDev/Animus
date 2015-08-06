@@ -95,11 +95,6 @@ namespace libanimus {
 		#region Private Fields
 
 		/// <summary>
-		/// The actions.
-		/// </summary>
-		readonly ICollection<HostAction> actions;
-
-		/// <summary>
 		/// The GUID.
 		/// </summary>
 		readonly Guid guid;
@@ -115,18 +110,11 @@ namespace libanimus {
 		/// Initializes a new instance of the <see cref="libanimus.IrcClient"/> class.
 		/// </summary>
 		public IrcClient () {
-			actions = new List<HostAction> ();
 			guid = Guid.NewGuid ();
 			Identifier = string.Format ("animus{0}", new string (guid.ToString ("N").Take (16).ToArray ()));
 			IsConnected = false;
 			HasJoined = false;
-			OnChannelMessage += (message, sender) => {
-				var com = Command.Parse (message);
-				com.Name = com.Name.ToLowerInvariant ();
-				var acts = actions.Where (act => act.Name.ToLowerInvariant () == com.Name);
-				foreach (var act in acts)
-					act.Run (com.Args);
-			};
+			OnChannelMessage += (message, sender) => { };
 			OnPrivateMessage += (message, sender) => { };
 		}
 
@@ -159,14 +147,6 @@ namespace libanimus {
 			sb.Append ("\r\n");
 			Writer.Write (sb);
 			Writer.Flush ();
-		}
-
-		/// <summary>
-		/// Registers an action.
-		/// </summary>
-		/// <param name="action">Action.</param>
-		public void RegisterAction (HostAction action) {
-			actions.Add (action);
 		}
 
 		#region Raw IRC commands

