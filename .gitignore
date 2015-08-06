@@ -1,3 +1,7 @@
+# Animus
+tools/
+conf.txt
+
 # User specific
 *.suo
 *.user
