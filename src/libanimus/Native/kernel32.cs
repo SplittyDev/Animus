@@ -1,10 +1,43 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
+using System.IO;
 
 namespace libanimus.Native
 {
 	public static partial class Native
 	{
+		/// <summary>
+		/// Creates a file.
+		/// </summary>
+		/// <returns>The file w.</returns>
+		/// <param name="filename">Filename.</param>
+		/// <param name="access">Access.</param>
+		/// <param name="share">Share.</param>
+		/// <param name="securityAttributes">Security attributes.</param>
+		/// <param name="creationDisposition">Creation disposition.</param>
+		/// <param name="flagsAndAttributes">Flags and attributes.</param>
+		/// <param name="templateFile">Template file.</param>
+		[DllImport ("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+		public static extern SafeFileHandle CreateFileW (
+			[MarshalAs (UnmanagedType.LPWStr)] string filename,
+			[MarshalAs (UnmanagedType.U4)] FileAccess access,
+			[MarshalAs (UnmanagedType.U4)] FileShare share,
+			IntPtr securityAttributes,
+			[MarshalAs (UnmanagedType.U4)] FileMode creationDisposition,
+			[MarshalAs (UnmanagedType.U4)] FileAttributes flagsAndAttributes,
+			IntPtr templateFile
+		);
+
+		/// <summary>
+		/// Deletes a file.
+		/// </summary>
+		/// <returns><c>true</c>, if file w was deleted, <c>false</c> otherwise.</returns>
+		/// <param name="lpFileName">Lp file name.</param>
+		[DllImport ("kernel32.dll", SetLastError = true)]
+		[return: MarshalAs (UnmanagedType.Bool)]
+		public static extern bool DeleteFileW ([MarshalAs (UnmanagedType.LPWStr)] string lpFileName);
+
 		/// <summary>
 		/// Creates a process.
 		/// </summary>
@@ -60,50 +93,12 @@ namespace libanimus.Native
 			out PROCESS_INFORMATION lpProcessInformation);
 
 		/// <summary>
-		/// PROCESS INFORMATION.
+		/// Gets the module handle.
 		/// </summary>
-		public struct PROCESS_INFORMATION
-		{
-			public IntPtr hProcess;
-			public IntPtr hThread;
-			public uint dwProcessId;
-			public uint dwThreadId;
-		}
-
-		/// <summary>
-		/// STARTUP INFO.
-		/// </summary>
-		public struct STARTUPINFO
-		{
-			public uint cb;
-			public string lpReserved;
-			public string lpDesktop;
-			public string lpTitle;
-			public uint dwX;
-			public uint dwY;
-			public uint dwXSize;
-			public uint dwYSize;
-			public uint dwXCountChars;
-			public uint dwYCountChars;
-			public uint dwFillAttribute;
-			public uint dwFlags;
-			public short wShowWindow;
-			public short cbReserved2;
-			public IntPtr lpReserved2;
-			public IntPtr hStdInput;
-			public IntPtr hStdOutput;
-			public IntPtr hStdError;
-		}
-
-		/// <summary>
-		/// SECURITY ATTRIBUTES.
-		/// </summary>
-		public struct SECURITY_ATTRIBUTES
-		{
-			public int length;
-			public IntPtr lpSecurityDescriptor;
-			public bool bInheritHandle;
-		}
+		/// <returns>The module handle.</returns>
+		/// <param name="lpModuleName">Lp module name.</param>
+		[DllImport ("kernel32.dll")]
+		public static extern IntPtr GetModuleHandle (string lpModuleName);
 	}
 }
 

