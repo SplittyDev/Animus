@@ -72,6 +72,8 @@
     <Compile Include="Native\FileInfo.Constants.cs" />
     <Compile Include="Native\shlwapi.cs" />
     <Compile Include="Actions\Predefined\ActionScreen.cs" />
+    <Compile Include="Actions\Predefined\ActionLs.cs" />
+    <Compile Include="Actions\Predefined\ActionWhoami.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

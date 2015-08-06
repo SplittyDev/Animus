@@ -48,6 +48,7 @@ namespace libanimus.Actions.Predefined
 
 		void UploadFileCompletedCallback (object sender, UploadFileCompletedEventArgs e) {
 			client.UploadFileCompleted -= UploadFileCompletedCallback;
+			File.Delete (filename);
 			NetworkManager.Instance.Notify (src, "Upload completed!");
 			NetworkManager.Instance.Notify (src, string.Format ("{0}/{1}", ACCESS_URI, filename));
 		}
