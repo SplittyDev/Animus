@@ -61,6 +61,12 @@ namespace libanimus.Networking {
 		/// <value>The nickname.</value>
 		public string Nickname { get; private set; }
 
+		/// <summary>
+		/// Gets the channels.
+		/// </summary>
+		/// <value>The channels.</value>
+		public List<string> Channels { get; private set; }
+
 		#endregion
 
 		#region Events
@@ -71,19 +77,45 @@ namespace libanimus.Networking {
 		public delegate void MessageHandler (string message, string sender);
 
 		/// <summary>
+		/// Connection handler.
+		/// </summary>
+		public delegate void ConnectionHandler (string hostname, int port);
+
+		/// <summary>
+		/// Name handler.
+		/// </summary>
+		public delegate void NameHandler (string[] names);
+
+		/// <summary>
+		/// Joined handler.
+		/// </summary>
+		public delegate void JoinedHandler (string channel);
+
+		public event NameHandler NamesObtained;
+
+		public event JoinedHandler ChannelJoined;
+
+		public event EventHandler LoggedIn;
+
+		/// <summary>
 		/// Occurs when a channel message has been received.
 		/// </summary>
-		public event MessageHandler OnChannelMessage;
+		public event MessageHandler ChannelMessage;
 
 		/// <summary>
 		/// Occurs when a private message has been received.
 		/// </summary>
-		public event MessageHandler OnPrivateMessage;
+		public event MessageHandler PrivateMessage;
+
+		/// <summary>
+		/// Occurs when the clients is connected to the host.
+		/// </summary>
+		public event ConnectionHandler Connected;
 
 		/// <summary>
 		/// Occurs when the clients gets disconnected from the irc.
 		/// </summary>
-		public event EventHandler OnDisconnect;
+		public event EventHandler Disconnected;
 
 		#endregion
 
@@ -123,6 +155,11 @@ namespace libanimus.Networking {
 		/// </summary>
 		TcpClient client;
 
+		/// <summary>
+		/// The tmp names.
+		/// </summary>
+		List<string> tmp_names;
+
 		#endregion
 
 		/// <summary>
@@ -131,9 +168,15 @@ namespace libanimus.Networking {
 		public IrcClient () {
 			guid = Guid.NewGuid ();
 			Identifier = string.Format ("animus{0}", new string (guid.ToString ("N").Take (16).ToArray ()));
-			OnChannelMessage += (message, sender) => { };
-			OnPrivateMessage += (message, sender) => { };
-			OnDisconnect += (sender, e) => { };
+			tmp_names = new List<string> ();
+			Channels = new List<string> ();
+			LoggedIn += (sender, e) => { };
+			NamesObtained += names => { };
+			ChannelJoined += channel => { };
+			ChannelMessage += (message, sender) => { };
+			PrivateMessage += (message, sender) => { };
+			Connected += (hostname, port) => { };
+			Disconnected += (sender, e) => { };
 		}
 
 		/// <summary>
@@ -148,19 +191,24 @@ namespace libanimus.Networking {
 			HasJoined = false;
 			connection_error = false;
 			validationCallback = callback;
+
 			if (validationCallback == null)
 				validationCallback = new RemoteCertificateValidationCallback
 					((sender, certificate, chain, sslPolicyErrors) => true);
+			
 			_Connect (server, port, ssl);
 			if (connection_error) {
 				Console.WriteLine ("Error while trying to connect.");
 				Console.WriteLine ("Call GetLastError to get the exception message.");
 				return;
 			}
+
 			while (!IsConnected) {
 			}
+
 			Task.Factory.StartNew (() => {
 				try {
+					Connected (server, port);
 					_Listen ();
 				} catch {
 					try {
@@ -174,7 +222,7 @@ namespace libanimus.Networking {
 				Console.WriteLine ("Disconnected from IRC.");
 				if (task.IsFaulted)
 					Console.WriteLine ("IRCClient listener task faulted.");
-				OnDisconnect (this, EventArgs.Empty);
+				Disconnected (this, EventArgs.Empty);
 			});
 		}
 
@@ -233,8 +281,16 @@ namespace libanimus.Networking {
 			SendRaw ("JOIN {0}", channel);
 		}
 
+		public void PART (string channel) {
+			SendRaw ("PART {0}", channel);
+		}
+
 		public void PRIVMSG (string target, string message) {
 			SendRaw ("PRIVMSG {0} {1}", target, message);
+		}
+
+		public void NAMES (string channel) {
+			SendRaw ("NAMES {0}", channel);	
 		}
 
 		#endregion
@@ -244,8 +300,11 @@ namespace libanimus.Networking {
 		public void LogIn (string username, string realname, string nickname) {
 			USER (username, realname);
 			NICK (nickname);
+
 			while (!HasJoined) {
 			}
+
+			LoggedIn (this, EventArgs.Empty);
 		}
 
 		public void Mode (string mode) {
@@ -324,6 +383,25 @@ namespace libanimus.Networking {
 						case "004":
 							HasJoined = true;
 							break;
+						// RPL_TOPIC
+						case "332":
+							var chan = commandParts.Skip (3).First ();
+							if (!Channels.Contains (chan)) {
+								Channels.Add (chan);
+								ChannelJoined (chan);
+							}
+							break;
+						// RPL_NAMEREPLY
+						case "353":
+							var users = commandParts.Skip (5);
+							foreach (var user in users)
+								tmp_names.Add (user.Trim (' ', ':'));
+							break;
+						// RPL_ENDOFNAMES
+						case "366":
+							NamesObtained (tmp_names.ToArray ());
+							tmp_names.Clear ();
+							break;
 						}
 
 						// Ignore all other numeric messages
@@ -350,9 +428,9 @@ namespace libanimus.Networking {
 						var msg = string.Join (" ", com.Args.Skip (1)).TrimStart (':');
 						if (com.Args.Length >= 2) {
 							if (com.Args [0].StartsWith ("#"))
-								OnChannelMessage (msg, com.Args [0]);
+								ChannelMessage (msg, sender_nick);
 							else
-								OnPrivateMessage (msg, sender_nick);
+								PrivateMessage (msg, sender_nick);
 						}
 						break;
 					}

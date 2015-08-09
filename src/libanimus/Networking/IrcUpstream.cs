@@ -25,8 +25,8 @@ namespace libanimus.Networking
 			Port = port;
 			SSL = ssl;
 			Client = new IrcClient ();
-			Client.OnDisconnect += _Connect;
-			Client.OnChannelMessage += (message, sender) => {
+			Client.Disconnected += _Connect;
+			Client.ChannelMessage += (message, sender) => {
 				if (message.StartsWith ("$")) {
 					message = message.Substring (1);
 					ActionPool.Instance.ProcessCommand (this, message);
