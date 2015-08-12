@@ -35,7 +35,7 @@ namespace libanimus.Networking {
 		/// Gets a value indicating whether this instance has joined.
 		/// </summary>
 		/// <value><c>true</c> if this instance has joined; otherwise, <c>false</c>.</value>
-		public bool HasJoined { get; private set; }
+		public bool HasJoined { get { return hasJoined; } }
 
 		/// <summary>
 		/// Gets the stream.
@@ -127,6 +127,11 @@ namespace libanimus.Networking {
 		RemoteCertificateValidationCallback validationCallback;
 
 		/// <summary>
+		///  A flag indicating whether the user successfully joined the IRC host.
+		/// </summary>
+		volatile bool hasJoined;
+
+		/// <summary>
 		/// A flag indicating whether a connection error occurred.
 		/// </summary>
 		bool connection_error;
@@ -172,7 +177,7 @@ namespace libanimus.Networking {
 		/// <param name="callback">The callback that checks the SSL certificate for validity</param> 
 		public void Connect (string server, int port, bool ssl, RemoteCertificateValidationCallback callback = null) {
 			IsConnected = false;
-			HasJoined = false;
+			hasJoined = false;
 			connection_error = false;
 			validationCallback = callback;
 
@@ -365,7 +370,7 @@ namespace libanimus.Networking {
 						case "002":
 						case "003":
 						case "004":
-							HasJoined = true;
+							hasJoined = true;
 							break;
 						// RPL_TOPIC
 						case "332":
