@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management;
 using libanimus.Internal;
+using Microsoft.Win32;
 
 namespace libanimus
 {
@@ -11,7 +12,9 @@ namespace libanimus
 		const string SECURITY_CENTER_NT5	= "rootSecurityCenter";
 		const string SECURITY_CENTER_NT6	= "rootSecurityCenter2";
 		const string WIN32_COMPUTER_SYSTEM	= "Win32_ComputerSystem";
-		const string CURRENTVERSION			= "SOFTWARE\\Microsoft Windows\\NT\\CurrentVersion";
+		const string REG_CURRENTVERSION		= "SOFTWARE\\Microsoft Windows\\NT\\CurrentVersion";
+		const string REG_UNINSTALL			= "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
+
 		static VMInfo cached_vm;
 		static SandboxInfo[] cached_sandboxes;
 
@@ -50,10 +53,30 @@ namespace libanimus
 		readonly static SandboxInfo[] Sandbox_Information = {
 			new SandboxInfo ("Sandboxie", module: "SbieDll.dll"),
 			new SandboxInfo ("ThreatExpert", module: "dbghelp.dll"),
-			new SandboxInfo ("Anubis2", regKey: CURRENTVERSION, regValue: "ProductID", regEquals: "76487-337-8429955-22614"),
-			new SandboxInfo ("JoeBox", regKey: CURRENTVERSION, regValue: "ProductID", regEquals: "55274-640-2673064-23950"),
-			new SandboxInfo ("CWSandbox", regKey: CURRENTVERSION, regValue: "ProductID", regEquals: "76487-644-3177037-23510"),
+			new SandboxInfo ("Anubis2", regKey: REG_CURRENTVERSION, regValue: "ProductID", regEquals: "76487-337-8429955-22614"),
+			new SandboxInfo ("JoeBox", regKey: REG_CURRENTVERSION, regValue: "ProductID", regEquals: "55274-640-2673064-23950"),
+			new SandboxInfo ("CWSandbox", regKey: REG_CURRENTVERSION, regValue: "ProductID", regEquals: "76487-644-3177037-23510"),
 		};
+
+		/// <summary>
+		/// Lists all installed applications.
+		/// </summary>
+		/// <returns>All installed applications.</returns>
+		public static string[] ListApplications () {
+			string[] applications;
+			using (var key = Registry.LocalMachine.OpenSubKey (REG_UNINSTALL)) {
+				applications = key.GetSubKeyNames ()
+					.Select (subkey => {
+						using (var subkey_name = key.OpenSubKey (subkey))
+							return subkey_name.GetValue ("DisplayName") as string;
+					})
+					.Where (str =>
+						!string.IsNullOrEmpty (str)
+						&& !string.IsNullOrWhiteSpace (str))
+					.ToArray ();
+			}
+			return applications;
+		}
 
 		/// <summary>
 		/// Lists all registered antivirus products.
@@ -62,11 +85,10 @@ namespace libanimus
 		public static string[] ListAntivirus () {
 			var auto = ListProducts ("AntivirusProduct");
 			var manual = AV_Information.Where (av => av.IsMatch ()).ToArray ();
-			foreach (var company in AV_Information.Select (av => av.Company)) {
+			foreach (var company in AV_Information.Select (av => av.Company))
 				manual = manual.Count (av => company == av.Company) > 1
 					? manual.Where (av => !(av.Company == company && av.Generic)).ToArray ()
 					: manual;
-			}
 			return auto.Concat (manual
 				.Select (av => av.Generic
 					? string.Format ("{0} {1}", av.Company, av.Name)
@@ -112,8 +134,11 @@ namespace libanimus
 
 		public static bool IsSandbox () {
 			var sandboxes = Sandbox_Information.Where (sandbox => sandbox.IsMatch ());
-			cached_sandboxes = sandboxes == null ? null : sandboxes.ToArray ();
-			cached_sandboxes = cached_sandboxes != null ? cached_sandboxes.Length == 0 ? null : cached_sandboxes : cached_sandboxes;
+			cached_sandboxes = sandboxes == null
+				? null : sandboxes.ToArray ();
+			cached_sandboxes = cached_sandboxes != null
+				? cached_sandboxes.Length == 0
+				? null : cached_sandboxes : cached_sandboxes;
 			return cached_sandboxes != null;
 		}
 
@@ -130,9 +155,9 @@ namespace libanimus
 		/// <param name="product">Product.</param>
 		static string[] ListProducts (string product) {
 			try {
-				return Environment.OSVersion.Version.Major > 5 ?
-					ListGeneric (SECURITY_CENTER_NT6, product) :
-					ListGeneric (SECURITY_CENTER_NT5, product);
+				return Environment.OSVersion.Version.Major > 5
+					? ListGeneric (SECURITY_CENTER_NT6, product)
+					: ListGeneric (SECURITY_CENTER_NT5, product);
 			}
 			catch (Exception) {
 				// Add error logging here
@@ -151,14 +176,12 @@ namespace libanimus
 				return default (ICollection<ManagementObject>);
 			query = string.Format ("SELECT * FROM {0}", query);
 			ManagementObjectSearcher mos;
-			if (string.IsNullOrEmpty (entry))
-				mos = new ManagementObjectSearcher (query);
-			else
-				mos = new ManagementObjectSearcher (entry, query);
+			mos = string.IsNullOrEmpty (entry)
+				? new ManagementObjectSearcher (query)
+				: new ManagementObjectSearcher (entry, query);
 			ManagementObjectCollection objs;
-			using (mos) {
+			using (mos)
 				objs = mos.Get ();
-			}
 			return objs.GetManagementObjects ();
 		}
 

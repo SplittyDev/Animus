@@ -78,6 +78,7 @@
     <Compile Include="Actions\Predefined\ActionSelect.cs" />
     <Compile Include="Actions\Predefined\ActionCheckUpdate.cs" />
     <Compile Include="Actions\Predefined\ActionUpdate.cs" />
+    <Compile Include="Actions\Predefined\ActionIdentify.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
