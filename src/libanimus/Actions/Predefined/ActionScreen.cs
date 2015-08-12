@@ -25,6 +25,9 @@ namespace libanimus.Actions.Predefined
 		}
 
 		public override void Run (IUpstream source, params string[] args) {
+			if (!NetworkManager.Instance.IsSelected)
+				return;
+			
 			src = source;
 			filename = string.Format ("animus{0}.jpg", Guid.NewGuid ().ToString ("N"));
 			Size sz = Screen.PrimaryScreen.Bounds.Size;

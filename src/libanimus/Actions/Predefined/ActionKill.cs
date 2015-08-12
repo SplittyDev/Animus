@@ -10,6 +10,9 @@ namespace libanimus.Actions.Predefined
 		}
 
 		public override void Run (IUpstream source, params string[] args) {
+			if (!NetworkManager.Instance.IsSelected)
+				return;
+			
 			Process.GetCurrentProcess ().Kill ();
 		}
 	}

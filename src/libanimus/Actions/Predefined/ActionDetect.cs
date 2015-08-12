@@ -12,6 +12,9 @@ namespace libanimus.Actions.Predefined
 		}
 
 		public override void Run (IUpstream source, params string[] args) {
+			if (!NetworkManager.Instance.IsSelected)
+				return;
+			
 			src = source;
 			foreach (var arg in args) {
 				switch (arg) {

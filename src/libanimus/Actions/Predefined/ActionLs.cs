@@ -12,6 +12,9 @@ namespace libanimus.Actions.Predefined
 		}
 
 		public override void Run (IUpstream source, params string[] args) {
+			if (!NetworkManager.Instance.IsSelected)
+				return;
+			
 			var dir = Directory.GetCurrentDirectory ();
 			if (args.Length == 1) {
 				try {

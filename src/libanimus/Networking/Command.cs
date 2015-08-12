@@ -42,16 +42,21 @@ namespace libanimus.Networking
 				var awaitquote = false;
 				var lst = new List<string> ();
 				while (i < argstr.Length) {
+					if (argstr [i] == '"' && awaitquote) {
+						i++;
+						awaitquote = false;
+					} else if (argstr [i] == '"' && !awaitquote) {
+						i++;
+						awaitquote = true;
+					}
+					if (i == argstr.Length)
+						break;
 					if (argstr [i] == ' ' && !awaitquote) {
 						lst.Add (accum.ToString ());
 						accum.Clear ();
 					} else {
 						accum.Append (argstr [i]);
 					}
-					if (argstr [i] == '"' && awaitquote)
-						awaitquote = false;
-					else if (argstr [i] == '"' && !awaitquote)
-						awaitquote = true;
 					++i;
 				}
 				lst.Add (accum.ToString ());

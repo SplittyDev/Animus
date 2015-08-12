@@ -119,21 +119,7 @@ namespace libanimus.Networking {
 
 		#endregion
 
-		#region Public Fields
-
-		/// <summary>
-		/// The identifier.
-		/// </summary>
-		public readonly string Identifier;
-
-		#endregion
-
 		#region Private Fields
-
-		/// <summary>
-		/// The GUID.
-		/// </summary>
-		readonly Guid guid;
 
 		/// <summary>
 		/// The validation callback.
@@ -166,8 +152,6 @@ namespace libanimus.Networking {
 		/// Initializes a new instance of the <see cref="IrcClient"/> class.
 		/// </summary>
 		public IrcClient () {
-			guid = Guid.NewGuid ();
-			Identifier = string.Format ("animus{0}", new string (guid.ToString ("N").Take (16).ToArray ()));
 			tmp_names = new List<string> ();
 			Channels = new List<string> ();
 			LoggedIn += (sender, e) => { };

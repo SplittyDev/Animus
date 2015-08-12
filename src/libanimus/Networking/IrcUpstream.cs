@@ -39,7 +39,8 @@ namespace libanimus.Networking
 			if (sender != this)
 				Console.WriteLine ("Catched OnDisconnect event. Reconnecting...");
 			Client.Connect (Host, Port, SSL);
-			Client.LogIn (Client.Identifier, Client.Identifier, Client.Identifier);
+			var ident = NetworkManager.Instance.Identifier;
+			Client.LogIn (ident, ident, ident);
 			Connected (this, EventArgs.Empty);
 		}
 

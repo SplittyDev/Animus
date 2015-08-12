@@ -58,8 +58,6 @@
     <Compile Include="Networking\Updater.cs" />
     <Compile Include="Networking\UpdateAvailableEventArgs.cs" />
     <Compile Include="Networking\UpdatePreparedEventArgs.cs" />
-    <Compile Include="Actions\Predefined\ActionUpdate.cs" />
-    <Compile Include="Actions\Predefined\ActionUpgrade.cs" />
     <Compile Include="Actions\Predefined\ActionStartArgs.cs" />
     <Compile Include="Actions\Predefined\ActionDetect.cs" />
     <Compile Include="Actions\Predefined\ActionAutoUpgrade.cs" />
@@ -77,6 +75,9 @@
     <Compile Include="Actions\Predefined\ActionBroadcast.cs" />
     <Compile Include="Actions\Predefined\ActionIrcRaw.cs" />
     <Compile Include="Cryptography\WhirlpoolCryptoServiceProvider.cs" />
+    <Compile Include="Actions\Predefined\ActionSelect.cs" />
+    <Compile Include="Actions\Predefined\ActionCheckUpdate.cs" />
+    <Compile Include="Actions\Predefined\ActionUpdate.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

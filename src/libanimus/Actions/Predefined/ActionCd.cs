@@ -10,14 +10,18 @@ namespace libanimus.Actions.Predefined
 		}
 
 		public override void Run (IUpstream source, params string[] args) {
-			if (args.Length == 1 && Directory.Exists (args [0]))
-				Environment.CurrentDirectory = args [0];
-			else if (args.Length > 1) {
-				var path = string.Join (" ", args);
-				if (Directory.Exists (path))
+			try {
+				if (args.Length == 1 && Directory.Exists (args [0]))
 					Environment.CurrentDirectory = args [0];
-			} else
+				else if (args.Length > 1) {
+					var path = string.Join (" ", args);
+					if (Directory.Exists (path))
+						Environment.CurrentDirectory = args [0];
+				} else
+					NetworkManager.Instance.Notify (source, "Invalid path.");
+			} catch {
 				NetworkManager.Instance.Notify (source, "Invalid path.");
+			}
 		}
 	}
 }

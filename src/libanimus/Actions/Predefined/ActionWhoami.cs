@@ -9,6 +9,9 @@ namespace libanimus.Actions.Predefined
 		}
 
 		public override void Run (IUpstream source, params string[] args) {
+			if (!NetworkManager.Instance.IsSelected)
+				return;
+			
 			NetworkManager.Instance.Notify (source, "{0}\\{1}",
 				Environment.MachineName.ToLowerInvariant (),
 				Environment.UserName.ToLowerInvariant ());

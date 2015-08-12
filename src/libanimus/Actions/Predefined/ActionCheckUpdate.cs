@@ -4,21 +4,21 @@ using libanimus.Networking;
 
 namespace libanimus.Actions.Predefined
 {
-	public class ActionAutoUpgrade : HostAction
+	public class ActionCheckUpdate : HostAction
 	{
-		public ActionAutoUpgrade () : base ("autoupgrade") {
-		}
+		IUpstream src;
 
-		string[] args;
+		public ActionCheckUpdate () : base ("checkupdate") {
+		}
 
 		public override void Run (IUpstream source, params string[] args) {
 			if (!NetworkManager.Instance.IsSelected)
 				return;
 			
-			this.args = args;
+			src = source;
 
 			if (args.Length != 1) {
-				NetworkManager.Instance.Notify (source, "Please provide an URI.");
+				NetworkManager.Instance.Notify (src, "Please provide an URI.");
 				return;
 			}
 
@@ -28,14 +28,16 @@ namespace libanimus.Actions.Predefined
 			Updater.Instance.CheckUpdate (args.First ());
 		}
 
-		static void NoUpdateAvailableCallback (object sender, EventArgs e) {
+		void NoUpdateAvailableCallback (object sender, EventArgs e) {
 			Updater.Instance.NoUpdateAvailable -= NoUpdateAvailableCallback;
-			NetworkManager.Instance.Broadcast ("No updates available.");
+			NetworkManager.Instance.Notify (src, "No updates available.");
 		}
 
 		void UpdateAvailableCallback (object sender, UpdateAvailableEventArgs e) {
 			Updater.Instance.UpdateAvailable -= UpdateAvailableCallback;
-			Updater.Instance.DownloadUpdate (args.First ());
+			NetworkManager.Instance.Notify (src, "Update available.");
+			NetworkManager.Instance.Notify (src, "[CurVer] {0}", e.currentVersion);
+			NetworkManager.Instance.Notify (src, "[NewVer] {0}", e.newVersion);
 		}
 	}
 }
