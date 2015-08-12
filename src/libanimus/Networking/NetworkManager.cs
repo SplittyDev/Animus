@@ -48,7 +48,7 @@ namespace libanimus.Networking
 		public NetworkManager () {
 			upstreamSources = new List<IUpstream> ();
 			guid = Guid.NewGuid ();
-			Identifier = string.Format ("animus{0}", new string (guid.ToString ("N").Take (16).ToArray ()));
+			Identifier = string.Format ("animus[{0}]", new string (guid.ToString ("D").Take (18).ToArray ()));
 			SelectedIdentifier = string.Empty;
 		}
 
@@ -75,6 +75,10 @@ namespace libanimus.Networking
 			if (upstreamSources.Any (src => src is TUpstream))
 				return upstreamSources.First (src => src is TUpstream) as TUpstream;
 			return null;
+		}
+
+		public string FullGuid () {
+			return guid.ToString ("D");
 		}
 	}
 }

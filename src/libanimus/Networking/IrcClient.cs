@@ -144,7 +144,7 @@ namespace libanimus.Networking {
 		/// <summary>
 		/// The tmp names.
 		/// </summary>
-		List<string> tmp_names;
+		readonly List<string> tmp_names;
 
 		#endregion
 
