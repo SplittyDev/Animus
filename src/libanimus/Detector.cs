@@ -123,6 +123,15 @@ namespace libanimus
 		}
 
 		/// <summary>
+		/// Determines if the specified application is installed.
+		/// </summary>
+		/// <returns><c>true</c> if the specified app is installed; otherwise, <c>false</c>.</returns>
+		/// <param name="app">App.</param>
+		public static bool IsInstalled (string app) {
+			return ListApplications ().Any (str => str == app);
+		}
+
+		/// <summary>
 		/// Gets the name of the VM.
 		/// </summary>
 		/// <returns>The VM name.</returns>
