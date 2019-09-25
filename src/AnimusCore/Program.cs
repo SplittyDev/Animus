@@ -34,7 +34,7 @@ namespace AnimusCore
 			Updater.Instance.StartupCheck ();
 
 			// Basic config
-			IRC_HOST = "int0x10.com";
+			IRC_HOST = "<server>";
 			IRC_PORT = 6697;
 			
 			// Get instances
@@ -44,7 +44,7 @@ namespace AnimusCore
 			// IRC upstream
 			Console.WriteLine ("Connecting to IRC...");
 			ircUpstream = new IrcUpstream ();
-			ircUpstream.Connected += (sender, e) => ircUpstream.Join ("#OperationMythicDawn");
+			ircUpstream.Connected += (sender, e) => ircUpstream.Join ("#animus");
 			ircUpstream.Connect (IRC_HOST, IRC_PORT);
 			network.RegisterUpstream (ircUpstream);
 
